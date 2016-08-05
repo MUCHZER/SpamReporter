@@ -15,11 +15,24 @@ $router->setBasePath('/spamreportv2');
      * Route map settings
      */
 $router->map('GET','/', function(){
-    include 'view/index.html';
+    include 'view/test.html';
+
 });
 
-$router->map('GET','/report', function(){
-    $method = "report";
+$router->map('GET','/report/[a:view].[a:format]?', function( $view, $format ){
+    $method = "reportlist";
+    $arg['format'] = $format;
+    $arg['view'] = $view;
+    include_once 'controller/Controller.php';
+});
+
+$router->map('GET','/vote/[a:view].[a:format]?', function( $view, $format ){
+    $method = "vote";
+    $arg['vote'] = $_REQUEST['vote'];
+    //$arg['author_token'] = $_REQUEST['author_token'];
+    $arg['author_token'] = $_REQUEST[1];
+    // $arg['post_id'] = $_REQUEST['post_id'];
+    $arg['post_id'] = $_REQUEST[80];
     $arg['format'] = $format;
     $arg['view'] = $view;
     include_once 'controller/Controller.php';
@@ -40,6 +53,14 @@ $router->map('GET','/search/[i:term]/[a:view].[a:format]', function($term, $view
     $arg['view'] = $view;
     include_once 'controller/Controller.php';
 });
+
+$router->map('GET','/search/[i:term]', function($term){
+    $method = "search";
+    $arg['term'] = $term;
+    $arg['format'] = 'json';
+    include_once 'controller/Controller.php';
+});
+
 
 $router->map('GET','/contact/', function(){
 
