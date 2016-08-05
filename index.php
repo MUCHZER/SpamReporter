@@ -14,16 +14,24 @@ $router->setBasePath('/spamreportv2');
     /*
      * Route map settings
      */
-$router->map('GET','/', function(){
-    include 'view/test.html';
+$router->map('GET','/', function(  ){
+    $method = "reportlist";
+    $arg['format'] = 'html';
+    $arg['view'] = 'index';
+    include_once 'controller/Controller.php';
+
 
 });
 
-$router->map('GET','/report/[a:view].[a:format]?', function( $view, $format ){
-    $method = "reportlist";
-    $arg['format'] = $format;
-    $arg['view'] = $view;
+$router->map('GET','/report', function( ){
+    $method = "formulaire";
+    $arg['format'] = 'html';
+    $arg['view'] = 'reportForm';
     include_once 'controller/Controller.php';
+});
+
+$router->map('POST','/post/[a:route]', function( $route ){
+    include_once 'controller/send.php';
 });
 
 $router->map('GET','/vote/[a:view].[a:format]?', function( $view, $format ){

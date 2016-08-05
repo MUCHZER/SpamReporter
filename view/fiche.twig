@@ -1,52 +1,59 @@
+{% include 'head.twig'  %}
+{% include 'navbar.twig'  %}
+
+
+{% for item in results %}
 <div class="container">
 	<div class="col-sm-12 col-md-7"> 
-		<h1 class="text-center">+{{ country }} {{ numero}} </h1>
+		<h1 class="text-center">+{{ item.country }} {{ item.number }} </h1>
 
 		<form class="form-inline" action="###">
-			<button class="btn btn-success col-sm-3" type="submit"> {{ + }} "Non-Spam"</button>
-			<button class="btn btn-warning col-sm-3 col-sm-offset-1" type="submit">{{ = }}  "Neutres"</button>
-			<button class="btn btn-danger col-sm-3 col-sm-offset-1" type="submit">{{ - }} "Spam"</button>
+			<button class="btn btn-success col-sm-3" type="submit"> + "Non-Spam"</button>
+			<button class="btn btn-warning col-sm-3 col-sm-offset-1" type="submit">=  "Neutres"</button>
+			<button class="btn btn-danger col-sm-3 col-sm-offset-1" type="submit">- "Spam"</button>
 		</form>
 	</div>
 
 	<div class="col-sm-12 col-md-5">
 		<div>
 			<span class="title">Signalé le : </span>
-			<span>{{ date }}</span>
-			<img src="img/type{{ type }}.png" class="float-right">
+			<span>{{ item.datespam }}</span>
+			<img src="img/type{{ item.type }}.png" class="float-right">
 		</div>
 		<div>
 			<span class="title">Signalé par :</span>
-			<span>{{ pseudo }}</span>
+			<span>{{ item.pseudo }}</span>
 		</div>
 		<div>
 			<h5>Remarque de l'auteur :</h5>
-			<p>{{ resume }}
-			</p>
+			<p>{{ item.resume }}</p>
 		</div>	
 	</div>
 	
 </div>
 
-
+{% endfor %}
+<!--
 <div id="commentArea" class="container">
 
-{% for item in results %} 
+{ for item in item %}
 	<div class="row">
 		<div class="col-sm-3">
-			<h5>Par : {{ auteur }}</h5>
-			<h5>Le: {{ datecomment }} </h5>
+			<h5>Par : { auteur }}</h5>
+			<h5>Le: { datecomment }} </h5>
 		</div>
 		<div class="col-sm-9">
-			<p>{{ comment }} </p>
+			<p>{ comment }} Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
 		</div>
-{% end for %}
+{ endfor %}
 
 
 	</div>
 </div>
 
-<!-- 
+
 *Changer l'action du formulaire pour lier au back
 *Checker les appels twig
 *
@@ -58,3 +65,6 @@
 *
 *
 -->
+
+
+{% include 'head.twig' %}

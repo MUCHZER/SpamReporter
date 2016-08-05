@@ -39,6 +39,9 @@ class DataReport
                 $data = $this->getReportList();
                 $pagedata['results'] = $data;
                 break;
+            case 'formulaire' :
+                $pagedata['results'] = '';
+                break;
             case 'vote' :
                 $data = $this->getVote($arg['vote']);
                 $pagedata['results'] = $data;
@@ -51,6 +54,8 @@ class DataReport
             case 'html' :
                 $data = $this->parseTwig($pagedata, $arg['view']);
                 break;
+            default :
+                $data = $pagedata;
         }
 
         return $data;
@@ -74,7 +79,10 @@ class DataReport
      */
     public function getReportById($id)
     {
-        $sql = "SELECT * FROM " . $this->report . " WHERE id = :id ";
+        $sql = "SELECT *, report.id AS prim_key, report.date AS datespam
+                FROM report
+                INNER JOIN author
+                ON report.author_id = author.id WHERE report.id = :id;";
         $exec = array(':id' => $id);
         $result = $this->db->selectSQL($sql, $exec);
         return $result;
@@ -239,7 +247,7 @@ class DataReport
             $result = $this->db->selectSQL($sql, $exec);
         }
 
-        return true;
+        return $result;
     }
 
     /**
@@ -313,14 +321,10 @@ class DataReport
      */
     public function getReportList()
     {
-        $sql = "SELECT *
+        $sql = "SELECT *, report.id AS prim_key
                 FROM report
                 INNER JOIN author
                 ON report.author_id = author.id;
-                SELECT *
-                FROM vote
-                INNER JOIN report
-                ON vote.report_id = report.id
                 ";
         $result = $this->db->selectSQL($sql);
         return $result;
