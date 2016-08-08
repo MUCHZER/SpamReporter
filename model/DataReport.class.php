@@ -27,7 +27,7 @@ class DataReport
     {
         switch ($method) {
             case 'search' :
-                $data = $this->searchList($arg['term']);
+                $data = $this->searchReport($arg['term']);
                 $pagedata['search'] = $arg['term'];
                 $pagedata['results'] = $data;
                 break;
@@ -61,7 +61,7 @@ class DataReport
         return $data;
     }
 
-    public function searchList($term)
+    public function searchReport($term)
     {
         $sql = "SELECT * FROM " . $this->report . " WHERE number LIKE :term";
         $exec = array('term' =>  $term . "%");
@@ -321,7 +321,7 @@ class DataReport
      */
     public function getReportList()
     {
-        $sql = "SELECT *, report.id AS prim_key
+        $sql = "SELECT *, report.id AS prim_key, report.date AS reportdate
                 FROM report
                 INNER JOIN author
                 ON report.author_id = author.id;
