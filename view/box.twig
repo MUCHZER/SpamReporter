@@ -1,0 +1,37 @@
+
+{% for item in results %}
+
+
+<div class="col-xs-12 col-sm-6 col-md-3">
+	<div class="panel panel-primary ">
+		<div class="panel-heading"> 
+			<h3 class="panel-title"><img src="img/type{{ item.type }}.png"> +{{ item.country }} {{ item.number }} </h3> 
+		</div> 
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li>Émis par : {{ item.pseudo }} </li>
+				<li>Le : {{ item.reportdate }} </li>
+			</ul>
+
+			<h4>Nature: </h4>
+				<p>{{ item.resume }}</p>
+
+				<span class="text-right"><a href="report/{{ item.prim_key }}/fiche.html">En savoir plus</a></span>
+		</div> 
+	</div>
+</div>
+
+  {% endfor %}
+
+
+<!-- 
+* Dans le CSS 
+* 
+* surclasser .list-inline :
+* 	font-size: 0.8em
+*
+* surclasser panel-body :
+*   padding: 1px 15px
+*
+*
+-->
