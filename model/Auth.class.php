@@ -17,6 +17,8 @@ class Auth
         $this->error = array();
         $this->err = 0;
         $this->errMsg = array();
+        $this->user = false;
+        $this->secretKey = "qs;dk!5f1:lm5j;56s*dpf9mpvl";
     }
 
     /*
@@ -148,23 +150,41 @@ class Auth
     }
 
 
-    public function login($array)
+    public function checkLogin($array)
     {
        $sql = "SELECT * FROM ".$this->author." WHERE pseudo = :pseudo AND password = :password";
             $exec = array(
                 'pseudo' => $array['pseudo'],
-                'password' => $array['password']
+                'password' => $this->cryptPassword($array['password'])
                 );
             $result = $this->db->selectSQL($sql, $exec);
-            if ($result) {
+            if (isset($result[0]['id'])) {
+                $this->user = $result[0];
                 return true;
             }else {return false;}
             
     }
 
+    public function createSessionToken()
+    {
+        if ($this->user) {
+            $token = md5($this->user['id'].$this->secretKey.$_SERVER['HTTP_USER_AGENT']);
+            $token .= "|".$this->user['id'];
+        }else{return false;}
+    }
+
+    public function checkSessionToken($token)
+    {
+        $check = explode('|', $token);
+        $checkToken = md5($check[1].$this->secretKey.$_SERVER['HTTP_USER_AGENT']);
+        $checkId = $check[1];
+        if ($checkToken == $check[0]) {
+            return true;
+        }else {return false;}
+    }
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 
     public function newUser($array) {
         $data = $this->verifUserArray($array);
