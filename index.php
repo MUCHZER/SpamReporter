@@ -4,6 +4,7 @@
 include_once 'model/templateParser.class.php';
 include 'vendor/autoload.php';
 
+
 // router init
 $router = new AltoRouter();
 $router->setBasePath('/spamreportv2');

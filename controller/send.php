@@ -16,6 +16,7 @@ switch ($route) {
         header('Location: ../report/'.$id."/fiche.html" );
         break;
     case 'author' :
+    
         break;
 }
 
