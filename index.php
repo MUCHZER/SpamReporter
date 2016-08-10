@@ -4,21 +4,20 @@
 include_once 'model/templateParser.class.php';
 include 'vendor/autoload.php';
 
+
 // router init
 $router = new AltoRouter();
 $router->setBasePath('/spamreportv2');
 
 
-    /*
-     * Route map settings
-     */
+/*
+* Route map settings
+*/
 $router->map('GET','/', function(  ){
     $method = "reportlist";
     $arg['format'] = 'html';
     $arg['view'] = 'index';
     include_once 'controller/Controller.php';
-
-
 });
 
 $router->map('GET','/report', function( ){
@@ -64,6 +63,15 @@ $router->map('GET','/search/[i:term]/[a:view].[a:format]', function($term, $view
     $arg['term'] = $term;
     $arg['format'] = $format;
     $arg['view'] = $view;
+    include_once 'controller/Controller.php';
+});
+
+$router->map('GET','/login/[a:view].[a:format]', function( $view, $format ){
+    $method = "login";
+    $arg['pseudo'] = $_REQUEST['pseudo'];
+    $arg['password'] = $_REQUEST['password'];
+    $arg['view'] = $view;
+    $arg['format'] = $format;
     include_once 'controller/Controller.php';
 });
 

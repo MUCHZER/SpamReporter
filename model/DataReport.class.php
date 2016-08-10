@@ -2,7 +2,6 @@
 
 class DataReport
 {
-
     /**
      * DataReport constructor.
      */
@@ -16,6 +15,12 @@ class DataReport
         $this->report = 'report';
         $this->comment = 'comment';
         $this->error = array();
+
+        //init auth object
+        require_once'model/Auth.class.php';
+        $this->auth = new Auth();
+
+
     }
 
     /**
@@ -33,7 +38,8 @@ class DataReport
                 break;
             case 'report' :
                 $data = $this->getReportById($arg['term']);
-                $pagedata['results'] = $data;
+                $pagedata['results'] = $data[0];
+//Gérer l'id non défini
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -46,6 +52,17 @@ class DataReport
                 $data = $this->getVote($arg['vote']);
                 $pagedata['results'] = $data;
                 break;
+            case 'subscribe' :
+
+                break;
+            case 'login' :
+                $login = $this->login($formdata);
+                $pagedata['formdata'] = $_REQUEST;
+                $pagedata['userdata'] = $this->auth->user;
+                if (!$login) {
+                    $pagedata['error'] = true;
+                }
+                break;
         }
         switch ($arg['format']) {
             case 'json' :
@@ -57,9 +74,23 @@ class DataReport
             default :
                 $data = $pagedata;
         }
-
         return $data;
     }
+
+    public function login($formdata)
+    {
+        $check = $this->auth->checkLogin($formdata);
+
+        if ($check) {
+           $token = $this->auth->createSessionToken();
+           return $token;
+        }else{
+            return false;
+        }
+    }
+
+
+
 
     public function searchReport($term)
     {
@@ -112,11 +143,28 @@ class DataReport
         }
     }
 
+    private function checkRate($author_id) //check si l'auteur a déjà voté
+    {
+        $sql = "SELECT * FROM " . $this->vote . " WHERE author_id = :author";
+        $exec = array('author' => $author_id);
+        $result = $this->db->selectSQL($sql, $exec);
+        if ($result) {
+            return true;
+        }else{return false;}
+    }
+
+    public function removeRate($author_id)
+    {
+        $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author";
+        $exec = array('author' => $author_id);
+        $result = $this->db->selectSQL($sql, $exec);
+    }
+
     public function rateSpam($author_id, $report_id) //vote négatif (rouge)
     {
         $check = $this->checkRate($author_id);
-
-        if (empty($check)) {
+        
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -129,23 +177,14 @@ class DataReport
             $sql = "UPDATE vote SET vote = '-1' WHERE author_id = :author_id";
             $exec = array('author_id' => $author_id);
             $result = $this->db->selectSQL($sql, $exec);
-
             echo "vote mis à jour";
         }
-    }
-
-    private function checkRate($author_id) //check si l'auteur a déjà voté
-    {
-        $sql = "SELECT * FROM " . $this->vote . " WHERE author_id = :author";
-        $exec = array('author' => $author_id);
-        $result = $this->db->selectSQL($sql, $exec);
     }
 
     public function rateNeutralSpam($author_id, $report_id) //vote neutre (orange)
     {
         $check = $this->checkRate($author_id);
-
-        if (empty($check)) {
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -158,7 +197,6 @@ class DataReport
             $sql = "UPDATE vote SET vote = '0' WHERE author_id = :author_id";
             $exec = array('author_id' => $author_id);
             $result = $this->db->selectSQL($sql, $exec);
-
             echo "vote mis à jour";
         }
     }
@@ -166,8 +204,7 @@ class DataReport
     public function rateNoSpam($author_id, $report_id) //vote positif (vert)
     {
         $check = $this->checkRate($author_id);
-
-        if (empty($check)) {
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -180,7 +217,6 @@ class DataReport
             $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id";
             $exec = array('author_id' => $author_id);
             $result = $this->db->selectSQL($sql, $exec);
-
             echo "vote mis à jour";
         }
     }
@@ -195,41 +231,6 @@ class DataReport
     }
 
     /**
-     * Function createNewAuthor
-     * @param  [type] $exec [description]
-     * @return [type]       [description]
-     */
-    public function createNewAuthor($exec)
-    {
-        if ($this->authorExist($exec)) {
-            return $this->error;
-        } else {
-            $sql = "INSERT INTO " . $this->author . " VALUES (:first, :last, :pseudo, :mail, :password, NOW(), :ipadress, :useragent) ";
-            $result = $this->db->selectSQL($sql, $exec);
-        }
-    }
-
-    /**
-     * Function authorExist
-     * @param  [type] $sql [description]
-     * @return [type]      [description]
-     */
-    private function authorExist($array)
-    {
-        $number = array("author" => $array['author']);
-        $sql = "SELECT * FROM " . $this->report . " WHERE author = :author";
-        $result = $this->db->selectSQL($sql, $number);
-        print_r($result);
-        if ($result == array()) {
-            $this->error = array("authorExist" => false);
-            return false;
-        } else {
-            $this->error = array("authorExist" => true);
-            return true;
-        }
-    }
-
-    /**
      * Function addReport($report)
      *
      * Add new phone number in report DB
@@ -239,14 +240,12 @@ class DataReport
      */
     public function addReport($exec)
     {
-
         if ($this->reportExist($exec)) {
             echo '<br> Error Doublon';
         } else {
             $sql = "INSERT INTO " . $this->report . "(`country`, `number`, `type`, `date`, `resume`, `author_id`) VALUES (:country, :number, :type, NOW(), :resume, :author_id);";
             $result = $this->db->selectSQL($sql, $exec);
         }
-
         return $result;
     }
 
@@ -279,7 +278,7 @@ class DataReport
      */
     public function addComment()
     {
-        # code...
+
     }
 
     /**
@@ -300,9 +299,6 @@ class DataReport
 
     /**
      * Function deleteComment($id)
-     *
-     *
-     *
      *
      *
      */
@@ -329,7 +325,6 @@ class DataReport
         $result = $this->db->selectSQL($sql);
         return $result;
     }
-
 
 }
 
