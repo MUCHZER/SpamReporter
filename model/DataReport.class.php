@@ -15,6 +15,12 @@ class DataReport
         $this->report = 'report';
         $this->comment = 'comment';
         $this->error = array();
+
+        //init auth object
+        require_once'model/Auth.class.php';
+        $this->auth = new Auth();
+
+
     }
 
     /**
@@ -49,6 +55,14 @@ class DataReport
             case 'subscribe' :
 
                 break;
+            case 'login' :
+                $login = $this->login($formdata);
+                $pagedata['formdata'] = $_REQUEST;
+                $pagedata['userdata'] = $this->auth->user;
+                if (!$login) {
+                    $pagedata['error'] = true;
+                }
+                break;
         }
         switch ($arg['format']) {
             case 'json' :
@@ -62,6 +76,21 @@ class DataReport
         }
         return $data;
     }
+
+    public function login($formdata)
+    {
+        $check = $this->auth->checkLogin($formdata);
+
+        if ($check) {
+           $token = $this->auth->createSessionToken();
+           return $token;
+        }else{
+            return false;
+        }
+    }
+
+
+
 
     public function searchReport($term)
     {
@@ -119,12 +148,23 @@ class DataReport
         $sql = "SELECT * FROM " . $this->vote . " WHERE author_id = :author";
         $exec = array('author' => $author_id);
         $result = $this->db->selectSQL($sql, $exec);
+        if ($result) {
+            return true;
+        }else{return false;}
+    }
+
+    public function removeRate($author_id)
+    {
+        $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author";
+        $exec = array('author' => $author_id);
+        $result = $this->db->selectSQL($sql, $exec);
     }
 
     public function rateSpam($author_id, $report_id) //vote négatif (rouge)
     {
         $check = $this->checkRate($author_id);
-        if (empty($check)) {
+        
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -144,7 +184,7 @@ class DataReport
     public function rateNeutralSpam($author_id, $report_id) //vote neutre (orange)
     {
         $check = $this->checkRate($author_id);
-        if (empty($check)) {
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -164,7 +204,7 @@ class DataReport
     public function rateNoSpam($author_id, $report_id) //vote positif (vert)
     {
         $check = $this->checkRate($author_id);
-        if (empty($check)) {
+        if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
                 'report_id' => $report_id,
@@ -285,7 +325,6 @@ class DataReport
         $result = $this->db->selectSQL($sql);
         return $result;
     }
-
 
 }
 

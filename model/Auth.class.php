@@ -50,6 +50,7 @@ class Auth
             return false;
         }else {return true;}
     }
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public function validFname($fName)
     {
@@ -149,7 +150,6 @@ class Auth
          } 
     }
 
-
     public function checkLogin($array)
     {
        $sql = "SELECT * FROM ".$this->author." WHERE pseudo = :pseudo AND password = :password";
@@ -162,7 +162,6 @@ class Auth
                 $this->user = $result[0];
                 return true;
             }else {return false;}
-            
     }
 
     public function createSessionToken()
@@ -170,6 +169,8 @@ class Auth
         if ($this->user) {
             $token = md5($this->user['id'].$this->secretKey.$_SERVER['HTTP_USER_AGENT']);
             $token .= "|".$this->user['id'];
+            $this->token = $token;
+            return $token;
         }else{return false;}
     }
 
