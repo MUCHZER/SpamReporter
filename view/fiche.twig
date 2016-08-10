@@ -1,11 +1,10 @@
 {% include 'head.twig'  %}
 {% include 'navbar.twig'  %}
 
-
-{% for item in results %}
+{% set number = results %}
 <div class="container">
 	<div class="col-sm-12 col-md-7"> 
-		<h1 class="text-center">+{{ item.country }} {{ item.number }} </h1>
+		<h1 class="text-center">+{{ number.country }} {{ number.number }} </h1>
 
 		<form class="form-inline" action="###">
 			<button class="btn btn-success col-sm-3" type="submit"> + "Non-Spam"</button>
@@ -17,24 +16,26 @@
 	<div class="col-sm-12 col-md-5">
 		<div>
 			<span class="title">Signalé le : </span>
-			<span>{{ item.datespam }}</span>
-			<img src="img/type{{ item.type }}.png" class="float-right">
+			<span>{{ number.datespam }}</span>
+			<img src="img/type{{ number.type }}.png" class="float-right">
 		</div>
 		<div>
 			<span class="title">Signalé par :</span>
-			<span>{{ item.pseudo }}</span>
+			<span>{{ number.pseudo }}</span>
 		</div>
 		<div>
 			<h5>Remarque de l'auteur :</h5>
-			<p>{{ item.resume }}</p>
+			<p>{{ number.resume }}</p>
 		</div>	
 	</div>
-	
 </div>
 
-{% endfor %}
 <!--
 <div id="commentArea" class="container">
+	<form action="" name="comment">
+		<textarea name="comment" placeholder="Votre commentaire ici"></textarea>
+		<button type="submit" class="btn btn-primary">Envoyer</button>
+	</form>
 
 { for item in item %}
 	<div class="row">
