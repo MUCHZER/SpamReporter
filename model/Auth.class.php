@@ -32,7 +32,7 @@ class Auth
 
     private function cryptPassword($uncrypted) {
         $crypted = password_hash($uncrypted, PASSWORD_BCRYPT);
-
+        return $crypted;
     }
 
     private function verifUserArray($array) {
@@ -62,7 +62,7 @@ class Auth
             // generate token
             $token = generateToken(60);
             $req = $this->db->selectSQL(
-                "INSERT INTO author SET first = :first, last = :last, pseudo = :pseudo, mail = :mail, password = :password, date = :date, ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
+                "INSERT INTO author SET first = :first, last = :last, pseudo = :pseudo, mail = :mail, password = :password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
                 array(
                     "first" => $data['first'],
                     "last" => $data['last'],

@@ -52,10 +52,11 @@ $router->map('GET','/report/[i:id]/[a:view].[a:format]?', function( $id, $view, 
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET','/search/', function(){
+$router->map('POST','/search', function(){
     $method = "search";
-    $arg['term'] = $_REQUEST['search'];
-    $arg['format'] = 'json';
+    $arg['term'] = strval( $_REQUEST['search'] );
+    $arg['format'] = 'html';
+    $arg['view'] = 'box';
     include_once 'controller/Controller.php';
 });
 
@@ -66,6 +67,19 @@ $router->map('GET','/search/[i:term]/[a:view].[a:format]', function($term, $view
     $arg['view'] = $view;
     include_once 'controller/Controller.php';
 });
+
+$router->map('GET','/sub', function(){
+    $method = "sub";
+    $arg['format'] = 'html';
+    $arg['view'] = 'sub';
+    include_once 'controller/Controller.php';
+});
+
+$router->map('POST','/sub', function(){
+    $route = "sub";
+    include_once 'controller/send.php';
+});
+
 
 
 $router->map('GET','/contact/', function(){

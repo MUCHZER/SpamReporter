@@ -46,7 +46,11 @@ class DataReport
                 $data = $this->getVote($arg['vote']);
                 $pagedata['results'] = $data;
                 break;
+            case 'sub':
+                $pagedata['results'] = '';
+                break;
         }
+
         switch ($arg['format']) {
             case 'json' :
                 $data = json_encode($pagedata);
