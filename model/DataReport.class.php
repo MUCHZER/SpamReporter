@@ -46,6 +46,9 @@ class DataReport
                 $data = $this->getVote($arg['vote']);
                 $pagedata['results'] = $data;
                 break;
+            case 'workbench':
+              $pagedata ='';
+              break;
         }
         switch ($arg['format']) {
             case 'json' :
@@ -325,7 +328,7 @@ class DataReport
                 FROM report
                 INNER JOIN author
                 ON report.author_id = author.id
-                
+
                 LIMIT $limit;
                 ";
         $result = $this->db->selectSQL($sql);
