@@ -319,12 +319,14 @@ class DataReport
      * @param (int)
      * @return (array)
      */
-    public function getReportList()
+    public function getReportList($limit= '8')
     {
         $sql = "SELECT *, report.id AS prim_key, report.date AS reportdate
                 FROM report
                 INNER JOIN author
-                ON report.author_id = author.id;
+                ON report.author_id = author.id
+                
+                LIMIT $limit;
                 ";
         $result = $this->db->selectSQL($sql);
         return $result;
