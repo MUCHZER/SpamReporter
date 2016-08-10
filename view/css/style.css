@@ -1,93 +1,11 @@
-
-@font-face {
-    font-family: 'champagne__limousinesBdIt';
-    src: url('../fonts/champagne__limousines_bold_italic-webfont.woff2') format('woff2'),
-         url('../fonts/champagne__limousines_bold_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
+.centered{
+margin:auto 0;    
+    
 }
-
-@font-face {
-    font-family: 'champagne__limousinesbold';
-    src: url('../fonts/champagne__limousines_bold-webfont.woff2') format('woff2'),
-         url('../fonts/champagne__limousines_bold-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'champagne__limousinesitalic';
-    src: url('../fonts/champagne__limousines_italic-webfont.woff2') format('woff2'),
-         url('../fonts/champagne__limousines_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
-
-@font-face {
-    font-family: 'champagne__limousinesregular';
-    src: url('../fonts/champagne__limousines-webfont.woff2') format('woff2'),
-         url('../fonts/champagne__limousines-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-h2{
-font-family: 'champagne__limousinesregular';
-
-}
-
-
-.navbar{
-    border-top: 1em solid #3e8acc;
-    font-family: 'champagne__limousinesbold';
-}
-.section2 .container-fluid{
-    padding-left: 8%;
-    padding-right: 8%;
-
-}
-
 .list-inline{
     font-size: 0.8em;
-
+    
 }
 .panel-body{
-    min-height:12em;
-    max-height:12em;
     padding: 1px 15px ;
-    overflow:visible;
-}
-.panel-text{
-    max-height: 4em;
-    min-height: 4em;
-    overflow: hidden;
-}
-.section1{
-    background-color: #cccccc;
-    min-height: 100vh;
-
-
-}
-.section1 button{
-height: 3.5em;
-
-}
-.section2{
-    min-height: 100vh;
-}
-.section2 h2 {
-padding:2em 0;
-}
-
-
-.centered{
-padding-top: 40vh;
-
 }

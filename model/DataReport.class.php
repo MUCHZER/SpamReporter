@@ -52,7 +52,6 @@ class DataReport
                 $data = $this->getVote($arg['vote']);
                 $pagedata['results'] = $data;
                 break;
-
             case 'subscribe' :
 
                 break;
@@ -64,9 +63,6 @@ class DataReport
                     $pagedata['error'] = true;
                 }
                 break;
-            case 'workbench':
-              $pagedata ='';
-              break;
         }
         switch ($arg['format']) {
             case 'json' :
@@ -319,14 +315,12 @@ class DataReport
      * @param (int)
      * @return (array)
      */
-    public function getReportList($limit= '8')
+    public function getReportList()
     {
         $sql = "SELECT *, report.id AS prim_key, report.date AS reportdate
                 FROM report
                 INNER JOIN author
-                ON report.author_id = author.id
-
-                LIMIT $limit;
+                ON report.author_id = author.id;
                 ";
         $result = $this->db->selectSQL($sql);
         return $result;
