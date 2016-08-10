@@ -79,7 +79,16 @@ $router->map('GET','/login/[a:view].[a:format]', function( $view, $format ){
 $router->map('GET','/contact/', function(){
 
 });
+//~~~~~~~~~~~~~~~~~~~~~WORKBENCH~~~~~~~~~~~~~~~~~~~~
 
+$router->map('GET','/workbench', function(){
+  $method = "formulaire";
+  $arg['format'] = 'html';
+  $arg['view'] = 'workbench';
+  include_once 'controller/Controller.php';
+});
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //matching
 $match = $router->match();
 
