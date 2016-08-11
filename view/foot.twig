@@ -7,7 +7,19 @@
     $(document).ready(function()
     {
         $(".js-example-basic-single").select2();
-      
+        blink();
+        $(".stick-bot").click(function() {
+        $('html, body').animate({
+          scrollTop: $("#box").offset().top
+      }, 2000);
+  });
+
     });
+    function blink(){
+    $('.stick-bot').delay(40).fadeTo(500,0.3).delay(100).fadeTo(500,1, blink);
+
+}
+
+
 </script>
 </html>

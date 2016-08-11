@@ -45,12 +45,14 @@ font-family: 'champagne__limousinesregular';
 
 
 .navbar{
-    border-top: 0.5em solid #3e8acc;
+  margin-bottom: 0px;
+    border-top: 1em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
 }
 .section2 .container-fluid{
     padding-left: 8%;
     padding-right: 8%;
+
 }
 
 .list-inline{
@@ -88,5 +90,11 @@ padding:2em 0;
 
 .centered{
 padding-top: 40vh;
+
+}
+.stick-bot{
+margin-top: 40vh;
+margin-left: 94vh;
+
 
 }
