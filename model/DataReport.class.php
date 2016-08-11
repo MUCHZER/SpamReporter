@@ -15,9 +15,10 @@ class DataReport
         $this->report = 'report';
         $this->comment = 'comment';
         $this->error = array();
+        $this->settings['basepath'] = '/spamreportv2/';
 
         //init auth object
-        require_once'model/Auth.class.php';
+        require_once 'model/Auth.class.php';
         $this->auth = new Auth();
 
 
@@ -39,7 +40,7 @@ class DataReport
             case 'report' :
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
-//Gérer l'id non défini
+                //Gérer l'id non défini
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -57,13 +58,18 @@ class DataReport
                 break;
             case 'login' :
                 $login = $this->login($formdata);
-                $pagedata['formdata'] = $_REQUEST;
-                $pagedata['userdata'] = $this->auth->user;
                 if (!$login) {
                     $pagedata['error'] = true;
+                } else {
+                    $this->auth->createCookie($token);
                 }
                 break;
         }
+
+        //export to twig
+        $pagedata['formdata'] = $_REQUEST;
+        $pagedata['userdata'] = $this->auth->user;
+        $pagedata['settings'] = $this->settings;
 
         switch ($arg['format']) {
             case 'json' :
@@ -83,20 +89,23 @@ class DataReport
         $check = $this->auth->checkLogin($formdata);
 
         if ($check) {
-           $token = $this->auth->createSessionToken();
-           return $token;
-        }else{
+            $token = $this->auth->createSessionToken();
+            return $token;
+        } else {
             return false;
         }
     }
 
-
+    public function logout()
+    {
+        $this->auth->deleteCookie();
+    }
 
 
     public function searchReport($term)
     {
         $sql = "SELECT * FROM " . $this->report . " WHERE number LIKE :term";
-        $exec = array('term' =>  $term . "%");
+        $exec = array('term' => $term . "%");
         $result = $this->db->selectSQL($sql, $exec);
         return $result;
     }
@@ -151,7 +160,9 @@ class DataReport
         $result = $this->db->selectSQL($sql, $exec);
         if ($result) {
             return true;
-        }else{return false;}
+        } else {
+            return false;
+        }
     }
 
     public function removeRate($author_id)
@@ -164,7 +175,7 @@ class DataReport
     public function rateSpam($author_id, $report_id) //vote négatif (rouge)
     {
         $check = $this->checkRate($author_id);
-        
+
         if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
@@ -325,6 +336,15 @@ class DataReport
                 ";
         $result = $this->db->selectSQL($sql);
         return $result;
+    }
+
+    public function checkAuth($arg, $cookie)
+    {
+        if (isset($arg['pseudo']) && isset($arg['password'])) {
+            $this->login($arg);
+        } elseif (isset($cookie['token'])) {
+            $this->auth->checkSessionToken($cookie['token']);
+        }
     }
 
 }

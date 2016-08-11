@@ -29,170 +29,195 @@ class Auth
      * @param length of your token
      * @return string
      */
-    private function generateToken($length){
+    private function generateToken($length)
+    {
         $alphabet = "0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
         return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
     }
 
-    private function cryptPassword($uncrypted) {
+    private function cryptPassword($uncrypted)
+    {
         $crypted = password_hash($uncrypted, PASSWORD_BCRYPT);
         return $crypted;
     }
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public function verifUser($array) {
+
+    /* Function verifUser
+     *
+     *
+     */
+    public function verifUser($array)
+    {
         $this->validFname($array['first']);
         $this->validLname($array['last']);
         $this->validPseudo($array['pseudo']);
         $this->validMail($array['mail']);
         $this->validPassword($array['password']);
 
-        if ($this->$err){
+        if ($this->$err) {
             return false;
-        }else {return true;}
+        } else {
+            return true;
+        }
     }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /* Function verifUser
+     *
+     *
+     */
     public function validFname($fName)
     {
         if (isset($fName)) {
             $err = 1;
-            $this->errMsg[] ="Champ du Prénom vide";
-        } 
+            $this->errMsg[] = "Champ du Prénom vide";
+        }
         if (strlen($fName) >= 45) {
             $err = 1;
-            $this->errMsg[] ="Nom trop long";
-        } 
-        if($err) {
+            $this->errMsg[] = "Nom trop long";
+        }
+        if ($err) {
             $this->err = 1;
             return false;
         } else {
             return true;
-         }  
+        }
     }
 
     public function validLname($lName)
     {
         if (isset($lName)) {
             $err = 1;
-            $this->errMsg[] ="Champ du Nom vide";
-        } 
+            $this->errMsg[] = "Champ du Nom vide";
+        }
         if (strlen($lName) >= 45) {
             $err = 1;
-            $this->errMsg[] ="Nom trop long";
-        } 
-        if($err) {
+            $this->errMsg[] = "Nom trop long";
+        }
+        if ($err) {
             $this->err = 1;
             return false;
-         } else {
+        } else {
             return true;
-         } 
+        }
     }
 
     public function validPseudo($pseudo)
     {
         if (isset($pseudo)) {
             $err = 1;
-            $this->errMsg[] ="Champ du Pseudo vide";
-        } 
+            $this->errMsg[] = "Champ du Pseudo vide";
+        }
         if (strlen($pseudo) >= 25) {
             $err = 1;
-            $this->errMsg[] ="Pseudo trop long";
-        } 
+            $this->errMsg[] = "Pseudo trop long";
+        }
         $arg['pseudo'] = $pseudo;
-        $check = $this->db->selectSQL("SELECT * FROM ".$this->author." WHERE pseudo = :pseudo",$arg);
+        $check = $this->db->selectSQL("SELECT * FROM " . $this->author . " WHERE pseudo = :pseudo", $arg);
         if (!empty($check)) {
-                $err = 1;
-                $this->errMsg[] = "Ce pseudo est déjà utilisé";
-        } 
-        if($err) {
+            $err = 1;
+            $this->errMsg[] = "Ce pseudo est déjà utilisé";
+        }
+        if ($err) {
             $this->err = 1;
             return false;
-         } else {
+        } else {
             return true;
-         } 
+        }
     }
 
     public function validMail($mail)
     {
         if (isset($mail)) {
             $err = 1;
-            $this->errMsg[] ="Champ du Mail vide";
-        } 
+            $this->errMsg[] = "Champ du Mail vide";
+        }
         if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
             $err = 1;
-            $this->errMsg[] ="Email incorrect";
-        } 
-        if($err) {
+            $this->errMsg[] = "Email incorrect";
+        }
+        if ($err) {
             $this->err = 1;
             return false;
-         } else {
+        } else {
             return true;
-         } 
+        }
     }
 
     public function validPassword($password)
-    {   
+    {
         if (isset($password)) {
             $err = 1;
-            $this->errMsg[] ="Champ du Nom vide";
+            $this->errMsg[] = "Champ du Nom vide";
         }
         if (isset($password) && strlen($password) >= 8 && strlen($password) <= 50) {
             $password = $this->cryptPassword($password);
         } else {
             $err = 1;
-            $this->errMsg[] ="Email incorrect";
-        }     
-        if($err) {
+            $this->errMsg[] = "Email incorrect";
+        }
+        if ($err) {
             $this->err = 1;
             return false;
-         } else {
+        } else {
             return true;
-         } 
+        }
     }
 
     public function checkLogin($array)
     {
-       $sql = "SELECT * FROM ".$this->author." WHERE pseudo = :pseudo AND password = :password";
-            $exec = array(
-                'pseudo' => $array['pseudo'],
-                'password' => $this->cryptPassword($array['password'])
-                );
-            $result = $this->db->selectSQL($sql, $exec);
-            if (isset($result[0]['id'])) {
-                $this->user = $result[0];
-                return true;
-            }else {return false;}
+        $sql = "SELECT * FROM " . $this->author . " WHERE pseudo = :pseudo AND password = :password";
+        $exec = array(
+            'pseudo' => $array['pseudo'],
+            'password' => $this->cryptPassword($array['password'])
+        );
+        $result = $this->db->selectSQL($sql, $exec);
+        if (isset($result[0]['id'])) {
+            $this->user = $result[0];
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function createSessionToken()
     {
         if ($this->user) {
-            $token = md5($this->user['id'].$this->secretKey.$_SERVER['HTTP_USER_AGENT']);
-            $token .= "|".$this->user['id'];
+            $token = md5($this->user['id'] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
+            $token .= "|" . $this->user['id'];
             $this->token = $token;
             return $token;
-        }else{return false;}
+        } else {
+            return false;
+        }
     }
 
     public function checkSessionToken($token)
     {
         $check = explode('|', $token);
-        $checkToken = md5($check[1].$this->secretKey.$_SERVER['HTTP_USER_AGENT']);
+        $checkToken = md5($check[1] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
         $checkId = $check[1];
         if ($checkToken == $check[0]) {
+            $this->token = $token;
+            $this->user = $this->getUserById($checkId);
             return true;
-        }else {return false;}
+        } else {
+            return false;
+        }
     }
 
+    /* Function getUserById
+     *
+     */
+    private function getUserById($id) {
+        $user = $this->db->selectSQL('SELECT * FROM author WHERE id = ' . $id);
+        return $user[0];
+    }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    public function newUser($array) {
+    public function newUser($array)
+    {
         $data = $this->verifUserArray($array);
         if ($array == false) {
             return false;
-        }
-        else {
+        } else {
             // generate token
             $token = generateToken(60);
             $req = $this->db->selectSQL(
@@ -218,4 +243,22 @@ class Auth
             header('Location: login.php');
         }
     }
+
+
+    /**
+     * @param string $token
+     *
+     */
+    public function createCookie($token)
+    {
+        setcookie("token", $token, time()+10000, "/");
+        return true;
+    }
+
+    public function deleteCookie()
+    {
+        setcookie("token", '', time()+10000, "/");
+        return true;
+    }
+}
 }
