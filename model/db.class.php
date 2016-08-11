@@ -6,9 +6,9 @@ class db
   function __construct() {
     $this->orderby = false;
 
-    $this->username = "leog"; // Votre nom d'utilisateur
-    $this->password = "U8WxNe1UNf"; // Votre mot de passe
-    $this->database = "phonespam_B"; // Le nom de la base de donnée
+    $this->username = ""; // Votre nom d'utilisateur
+    $this->password = ""; // Votre mot de passe
+    $this->database = ""; // Le nom de la base de donnée
     $this->hostname = "localhost"; // l'adresse du serveur mysql (le nom de l'hôte)
     $this->error = 0; // init l'erreur a 0
     $this->debug = 0;
@@ -28,7 +28,6 @@ class db
     $this->prepareRequest($sql.$orderby);
     $this->executeRequest($exec);
     $this->fetchAll(PDO::FETCH_ASSOC);
-
     return $this->result;
   }
 
@@ -68,7 +67,6 @@ class db
 
   private function executeRequest($exec) {
     $this->request->execute($exec);
-      //$this->id = $this->bdd->lastInsertId();
   }
 
   private function fetchAll() {
