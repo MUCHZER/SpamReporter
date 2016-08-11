@@ -1,8 +1,8 @@
 
-  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
+  <nav class="navbar navbar-default" >
     <div class="container-fluid">
        <div class="navbar-header">
-          <a class="navbar-brand" href="http://olivierl.student.codeur.online/spamReporter/">SPAM AWARDS</a>
+          <a class="navbar-brand" href="/spamreportv2/">SPAM REPORTER</a>
           <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -11,15 +11,28 @@
         </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="report">Report</a></li>
-          <li><a href="search">Recherche</a></li>
-          <li><a href="contact">Contact</a></li>
-          <li><a href="annuaire">Annuaire</a></li>
+          <li><a href="/spamreportv2/report">Report</a></li>
+          <li><a href="/spamreportv2/contact">Nous contacter</a></li>
+          <li><a href="/spamreportv2/annuaire">Annuaire</a></li>
         </ul>
+<!-- Conditionner avec login et if twig -->
+  <!-- Si login -->
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Profile</a></li>
-          <li><a href="sub">Login</a></li>
+          <li>Bonjour { pseudo }.</li>
+          <li><a href="#">Se déconnecter</a></li>
         </ul>
+  <!-- else -->      
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Se connecter</a></li>
+        </ul>
+
         </div>
     </div>
   </nav>
+
+
+
+
+
+
+
