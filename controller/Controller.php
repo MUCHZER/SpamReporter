@@ -8,6 +8,6 @@ $dr = new DataReport();
 
 $data = $dr->execute($method, $arg);
 
-print_r($data);
+echo($data);
 
  ?>

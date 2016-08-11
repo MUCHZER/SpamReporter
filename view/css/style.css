@@ -45,13 +45,12 @@ font-family: 'champagne__limousinesregular';
 
 
 .navbar{
-    border-top: 1em solid #3e8acc;
+    border-top: 0.5em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
 }
 .section2 .container-fluid{
     padding-left: 8%;
     padding-right: 8%;
-
 }
 
 .list-inline{

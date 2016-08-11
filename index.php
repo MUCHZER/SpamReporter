@@ -51,9 +51,9 @@ $router->map('GET','/report/[i:id]/[a:view].[a:format]?', function( $id, $view, 
     include_once 'controller/Controller.php';
 });
 
-$router->map('POST','/search', function(){
+$router->map('POST','/search/', function(){
     $method = "search";
-    $arg['term'] = strval( $_REQUEST['search'] );
+    $arg['term'] =  $_REQUEST['search'] ;
     $arg['format'] = 'html';
     $arg['view'] = 'box';
     include_once 'controller/Controller.php';
