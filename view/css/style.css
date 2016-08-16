@@ -45,15 +45,15 @@ font-family: 'champagne__limousinesregular';
 
 
 .navbar{
-    top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top: 0.5em solid #3e8acc;
+
+  margin-bottom: 0px;
+    border-top: 1em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
 }
 .section2 .container-fluid{
     padding-left: 8%;
     padding-right: 8%;
+
 }
 
 .list-inline{
@@ -94,6 +94,7 @@ padding-top: 40vh;
 
 }
 
+
 .footer {
     width: 100%;
     height: 60px;
@@ -103,4 +104,8 @@ padding-top: 40vh;
 
 .container .text-muted {
     margin: 20px 0;
-}
+
+.stick-bot{
+margin-top: 40vh;
+margin-left: 94vh;
+

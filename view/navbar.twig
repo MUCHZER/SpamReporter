@@ -6,9 +6,11 @@
         </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="{{ settings.basepath }}report/">Report</a></li>
+
+          <li><a href="{{ settings.basepath }}report/">Signaler</a></li>
           <li><a href="{{ settings.basepath }}contact/">Nous contacter</a></li>
           <li><a href="{{ settings.basepath }}annuaire/">Annuaire</a></li>
+
         </ul>
 <!-- Conditionner avec login et if twig -->
   <!-- Si login -->
@@ -16,7 +18,7 @@
           <li>Bonjour { pseudo }.</li>
           <li><a href="{{ settings.basepath }}logout/">Se déconnecter</a></li>
         </ul>
-  <!-- else -->      
+  <!-- else -->
         <ul class="nav navbar-nav navbar-right">
           <li><a href="{{ settings.basepath }}login/">Se connecter</a></li>
         </ul>
@@ -24,10 +26,3 @@
         </div>
     </div>
   </nav>
-
-
-
-
-
-
-

@@ -1,5 +1,11 @@
 {% include 'head.twig' %}
 {% include 'navbar.twig' %}
+
+{% if data is defined %}
+
+{% endif %}
+
+{% if data is not defined %}
 <div class="container">
 <h2>Création de compte</h2>
 
@@ -51,5 +57,7 @@
 </div>
 </form>
 </div>
+
+{% endif %}
 {% include 'footer.twig' %}
 {% include 'foot.twig' %}
