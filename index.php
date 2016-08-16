@@ -83,30 +83,24 @@ $router->map('GET|POST','/login/[a:view].[a:format]', function( $view, $format )
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET','/subscribe/', function( ){
+$router->map('GET|POST','/subscribe/', function( ){
     $method = "subscribe";
     $arg['view'] = 'workbench';
     $arg['format'] = 'html';
     include_once 'controller/Controller.php';
 });
 
-$router->map('POST','/subscribe/', function( ){
-    include_once 'controller/send.php';
-});
-
 $router->map('GET|POST','/login/', function( ){
     $method = "login";
-    $arg['pseudo'] = $_REQUEST['pseudo'];
-    $arg['password'] = $_REQUEST['password'];
     $arg['view'] = 'login';
     $arg['format'] = 'html';
     include_once 'controller/Controller.php';
 });
 
 $router->map('GET|POST','/contact/', function(){
-    $method = "contact";
+    $method = "incoming";
     $arg['format'] = 'html';
-    $arg['view'] = 'contact';
+    $arg['view'] = 'incoming';
     include_once 'controller/Controller.php';
 
 });
@@ -118,7 +112,8 @@ $match = $router->match();
 if( $match && is_callable( $match['target'] ) ) {
 	call_user_func_array( $match['target'], $match['params'] );
 } else {
-	// no route was matched
-	// header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-	echo 'RIP 404 ZER';
+    $method = "404";
+    $arg['format'] = 'html';
+    $arg['view'] = '404';
+    include_once 'controller/Controller.php';
 }
