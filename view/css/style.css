@@ -43,6 +43,12 @@ font-family: 'champagne__limousinesregular';
 
 }
 
+[class^="fa"], [class*=" fa"] {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 30vh;
+}
 
 .navbar{
 
@@ -109,3 +115,7 @@ padding-top: 40vh;
 margin-top: 40vh;
 margin-left: 94vh;
 
+.stick-bot{
+text-align: center;
+
+}
