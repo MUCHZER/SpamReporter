@@ -20,7 +20,14 @@ $router->map('GET|POST','/', function(  ){
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET|POST','/report', function( ){
+$router->map('GET|POST','/annuaire/', function(  ){
+    $method = "incoming";
+    $arg['format'] = 'html';
+    $arg['view'] = 'incoming';
+    include_once 'controller/Controller.php';
+});
+
+$router->map('GET|POST','/report/', function( ){
     $method = "formulaire";
     $arg['format'] = 'html';
     $arg['view'] = 'reportForm';
@@ -76,7 +83,18 @@ $router->map('GET|POST','/login/[a:view].[a:format]', function( $view, $format )
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET|POST','/login/', function( $view, $format ){
+$router->map('GET','/subscribe/', function( ){
+    $method = "subscribe";
+    $arg['view'] = 'workbench';
+    $arg['format'] = 'html';
+    include_once 'controller/Controller.php';
+});
+
+$router->map('POST','/subscribe/', function( ){
+    include_once 'controller/send.php';
+});
+
+$router->map('GET|POST','/login/', function( ){
     $method = "login";
     $arg['pseudo'] = $_REQUEST['pseudo'];
     $arg['password'] = $_REQUEST['password'];
@@ -86,6 +104,10 @@ $router->map('GET|POST','/login/', function( $view, $format ){
 });
 
 $router->map('GET|POST','/contact/', function(){
+    $method = "incoming";
+    $arg['format'] = 'html';
+    $arg['view'] = 'incoming';
+    include_once 'controller/Controller.php';
 
 });
 

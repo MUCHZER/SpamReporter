@@ -1,14 +1,14 @@
 {% include 'head.twig' %}
 {% include 'navbar.twig' %}
-
+<div class="container">
 <h2>Création de compte</h2>
 
-<form class="formhorizontal centered" action="" method="post">
+<form class="formhorizontal" action="{{ settings.basepath }}subscribe/" method="post">
   <div class="">
     <div class="form-group">
       <label for="last" class="control-label col-xs-2">Nom</label>
       <div class="input-group col-xs-10">
-        <div class="input-group-addon">$</div>
+        <div class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></div>
         <input class="form-control" type="text" id="last">
       </div>
     </div>
@@ -47,8 +47,9 @@
         <input class="form-control"  type="email" id="email">
       </div>
     </div>
+    <button class="btn btn-primary btn-info" type="submit">Envoyer !</button>
 </div>
 </form>
-
-
+</div>
+{% include 'footer.twig' %}
 {% include 'foot.twig' %}

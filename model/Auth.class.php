@@ -261,4 +261,4 @@ class Auth
         return true;
     }
 }
-}
+

@@ -1,28 +1,24 @@
- <nav class="navbar navbar-inverse navbar-fixed-top">
+ <nav class="navbar navbar-inverse">
     <div class="container-fluid">
        <div class="navbar-header">
-          <a class="navbar-brand" href="/spamreportv2/">SPAM REPORTER</a>
-          <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+          <a class="navbar-brand" href="{{ settings.basepath }}">SPAM REPORTER</a>
+
         </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/spamreportv2/report">Report</a></li>
-          <li><a href="/spamreportv2/contact">Nous contacter</a></li>
-          <li><a href="/spamreportv2/annuaire">Annuaire</a></li>
+          <li><a href="{{ settings.basepath }}report/">Report</a></li>
+          <li><a href="{{ settings.basepath }}contact/">Nous contacter</a></li>
+          <li><a href="{{ settings.basepath }}annuaire/">Annuaire</a></li>
         </ul>
 <!-- Conditionner avec login et if twig -->
   <!-- Si login -->
         <ul class="nav navbar-nav navbar-right">
           <li>Bonjour { pseudo }.</li>
-          <li><a href="#">Se déconnecter</a></li>
+          <li><a href="{{ settings.basepath }}logout/">Se déconnecter</a></li>
         </ul>
   <!-- else -->      
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/spamreportv2/login/">Se connecter</a></li>
+          <li><a href="{{ settings.basepath }}login/">Se connecter</a></li>
         </ul>
 
         </div>
