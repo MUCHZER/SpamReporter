@@ -104,9 +104,9 @@ $router->map('GET|POST','/login/', function( ){
 });
 
 $router->map('GET|POST','/contact/', function(){
-    $method = "incoming";
+    $method = "contact";
     $arg['format'] = 'html';
-    $arg['view'] = 'incoming';
+    $arg['view'] = 'contact';
     include_once 'controller/Controller.php';
 
 });

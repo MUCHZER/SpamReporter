@@ -1,4 +1,7 @@
+body{
+  max-width: 200vh;
 
+}
 @font-face {
     font-family: 'champagne__limousinesBdIt';
     src: url('../fonts/champagne__limousines_bold_italic-webfont.woff2') format('woff2'),
@@ -40,6 +43,7 @@
 
 h2{
 font-family: 'champagne__limousinesregular';
+text-align: center;
 
 }
 
@@ -79,7 +83,7 @@ font-family: 'champagne__limousinesregular';
 }
 .section1{
     background-color: #cccccc;
-    min-height: 100vh;
+    min-height: 95vh;
 
 
 }
@@ -87,8 +91,9 @@ font-family: 'champagne__limousinesregular';
 height: 3.5em;
 
 }
+
 .section2{
-    min-height: 100vh;
+    min-height: 95vh;
 }
 .section2 h2 {
 padding:2em 0;
@@ -96,7 +101,7 @@ padding:2em 0;
 
 
 .centered{
-padding-top: 40vh;
+padding-top: 35vh;
 
 }
 
@@ -111,11 +116,8 @@ padding-top: 40vh;
 .container .text-muted {
     margin: 20px 0;
 
-.stick-bot{
-margin-top: 40vh;
-margin-left: 94vh;
-
-.stick-bot{
-text-align: center;
+}
+.contactform{
+margin-top: 20vh;
 
 }
