@@ -1,10 +1,11 @@
 {% include 'head.twig'  %}
 {% include 'navbar.twig'  %}
-<div class="container">
+<section class="section1">
+<div class="container ">
 
-<h1> Signaler un numéro :</h1>
+<legend> Signaler un numéro </legend>
 
-	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group">
+	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
 
 		<div class="col-xs-12 col-md-4">
 			<label for="country">Indicatif : </label>
@@ -37,7 +38,7 @@
 	</form>
 
 </div>
-
+</section>
 <!--
 * class align-right à définir pour le bouton
 * styles à donner aux labels

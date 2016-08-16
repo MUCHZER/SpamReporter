@@ -118,6 +118,11 @@ padding-top: 35vh;
 
 }
 .contactform{
-margin-top: 20vh;
+margin-top: 10vh;
+
+}
+legend{
+  font-size:2em;
+padding-top: 2em;
 
 }

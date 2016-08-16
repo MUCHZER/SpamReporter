@@ -1,14 +1,17 @@
 {% include 'head.twig' %}
 {% include 'navbar.twig' %}
 <section class="section1">
+<div class="container">
+
+
 <legend>Nous contacter</legend>
   <form class="form-horizontal container-fluid">
     <fieldset class="contactform">
 
       <!-- Text input-->
       <div class="form-group">
-        <label class="col-md-4 control-label" for="nom">Nom</label>
-        <div class="col-md-4">
+        <label class=" control-label" for="nom">Nom</label>
+        <div class="">
         <input id="nom" name="nom" type="text" placeholder="" class="form-control input-md" required="">
 
         </div>
@@ -16,8 +19,8 @@
 
       <!-- Text input-->
       <div class="form-group">
-        <label class="col-md-4 control-label" for="email">E-mail</label>
-        <div class="col-md-4">
+        <label class=" control-label" for="email">E-mail</label>
+        <div class="">
         <input id="email" name="email" type="text" placeholder="" class="form-control input-md" required="">
 
         </div>
@@ -25,22 +28,23 @@
 
       <!-- Textarea -->
       <div class="form-group">
-        <label class="col-md-4 control-label" for="message">Message</label>
-        <div class="col-md-4">
+        <label class=" control-label" for="message">Message</label>
+        <div class="">
           <textarea rows="6" cols="100" class="form-control" id="message" name="message">Votre message</textarea>
         </div>
       </div>
 
       <!-- Button -->
       <div class="form-group">
-        <label class="col-md-4 control-label" for="singlebutton"></label>
-        <div class="col-md-4">
+        <label class="control-label" for="singlebutton"></label>
+        <div class="">
           <button id="singlebutton" name="singlebutton" class="btn btn-lg btn-primary btn-info">Envoyer</button>
         </div>
       </div>
 
     </fieldset>
   </form>
+  </div>
 </section>
 
 
