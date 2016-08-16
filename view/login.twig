@@ -1,5 +1,12 @@
+{% include 'head.twig' %}
+{% include 'navbar.twig' %}
+
 <form action="/spamreportv2/login/login.html">
 	<input type="text" name="pseudo" value="{{ formdata.pseudo }}">
 	<input type="password" name="password">
 	<button type="submit">Go !</button>
 </form>
+
+
+{% include 'footer.twig' %}
+{% include 'foot.twig' %}

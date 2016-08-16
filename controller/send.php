@@ -26,7 +26,7 @@ switch ($route) {
         $array['ipadress'] = $_SERVER['REMOTE_ADDR'];
         $array['useragent'] = $_SERVER['HTTP_USER_AGENT'];
         $auth->newUser($array);
-
+        header( 'Location: ../subscribe/?error='.$error );
         break;
 }
 
