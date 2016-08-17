@@ -74,14 +74,6 @@ $router->map('GET|POST','/search/[i:term]/[a:view].[a:format]', function($term, 
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET|POST','/login/[a:view].[a:format]', function( $view, $format ){
-    $method = "login";
-    $arg['pseudo'] = $_REQUEST['pseudo'];
-    $arg['password'] = $_REQUEST['password'];
-    $arg['view'] = $view;
-    $arg['format'] = $format;
-    include_once 'controller/Controller.php';
-});
 
 $router->map('GET|POST','/subscribe/', function( ){
     $method = "subscribe";
