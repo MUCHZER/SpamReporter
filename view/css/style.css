@@ -44,15 +44,15 @@ text-align: center;
 
 }
 
-[class^="fa"], [class*=" fa"] {
-    display: inline-block;
+#scroller {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     text-align: center;
-    margin-top: 30vh;
 }
 
-#navtop{
 
+#navtop{
   margin-bottom: 0px;
     border-top: 1em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
