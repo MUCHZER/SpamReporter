@@ -1,7 +1,4 @@
-body{
-  max-width: 200vh;
 
-}
 @font-face {
     font-family: 'champagne__limousinesBdIt';
     src: url('../fonts/champagne__limousines_bold_italic-webfont.woff2') format('woff2'),
@@ -47,12 +44,14 @@ text-align: center;
 
 }
 
-[class^="fa"], [class*=" fa"] {
-    display: inline-block;
+#scroller {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     text-align: center;
-    margin-top: 30vh;
 }
+
+
 
 .navbar{
 
