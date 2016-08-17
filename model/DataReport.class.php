@@ -51,7 +51,6 @@ class DataReport
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
                 $pagedata['json'] = json_decode($data[0]['json']);
-                //Gérer l'id non défini
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -68,11 +67,14 @@ class DataReport
                 $data = $this->auth->newUser($pagedata['formdata']);
                 $pagedata['results'] = $data;
                 break;
+            case 'logout' :
+                $this->auth->disconnect();
+                $pagedata['results'] = '';
+                break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
-                echo $login;
                 if ($this->auth->user == false) {
-                    echo 'FROMAGE';
+
                 } else {
                   $this->auth->createCookie($login);
                 }
@@ -342,13 +344,13 @@ class DataReport
      * @param (int)
      * @return (array)
      */
-    public function getReportList()
+    public function getReportList($orderby = "DESC", $limit = '8')
     {
         $sql = "SELECT *, report.id AS prim_key, report.date AS reportdate
                 FROM report
                 INNER JOIN author
-                ON report.author_id = author.id;
-                ";
+                ON report.author_id = author.id
+                ORDER BY report.date " . $orderby .  " LIMIT " . $limit . ";";
         $result = $this->db->selectSQL($sql);
         return $result;
     }

@@ -1,32 +1,32 @@
- <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-       <div class="navbar-header">
-          <a class="navbar-brand" href="{{ settings.basepath }}">SPAM REPORTER</a>
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#spamReporterNav">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{ settings.basepath }}">SPAM REPORTER</a>
+		</div>
+		<div class="collapse navbar-collapse" id="spamReporterNav">
+			<ul class="nav navbar-nav">
+
+				<li><a href="{{ settings.basepath }}report/">Signaler</a></li>
+				<li><a href="{{ settings.basepath }}contact/">Nous contacter</a></li>
+				<li><a href="{{ settings.basepath }}annuaire/">Annuaire</a></li>
+
+			</ul>
+			<!-- Conditionner avec login et if twig -->
+			<!-- Si login -->
+            {% if user is not empty %}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Bonjour {{ user.pseudo }}.</a></li>
+				<li><a href="{{ settings.basepath }}logout/">Se déconnecter</a></li>
+			</ul>
+            {% endif %}
+			<!-- else -->
+            {% if user is empty %}
+            <ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ settings.basepath }}login/">Se connecter</a></li>
+			</ul>
+            {% endif %}
+
+
         </div>
-      <div class="collapse navbar-collapse " id="spamReporterNav">
-        <ul class="nav navbar-nav">
-
-          <li><a href="{{ settings.basepath }}report/">Signaler</a></li>
-          <li><a href="{{ settings.basepath }}contact/">Nous contacter</a></li>
-          <li><a href="{{ settings.basepath }}annuaire/">Annuaire</a></li>
-
-        </ul>
-<!-- Conditionner avec login et if twig -->
-  <!-- Si login -->
-        <ul class="nav navbar-nav navbar-right">
-          <li>Bonjour { pseudo }.</li>
-          <li><a href="{{ settings.basepath }}logout/">Se déconnecter</a></li>
-        </ul>
-  <!-- else -->
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="{{ settings.basepath }}login/">Se connecter</a></li>
-        </ul>
-
-        </div>
-    </div>
-  </nav>
+	</div>
+</nav>

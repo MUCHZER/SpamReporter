@@ -7,15 +7,15 @@
     {
         $(".js-example-basic-single").select2();
         blink();
-        $(".stick-bot").click(function() {
+        $("#scroller").click(function() {
         $('html, body').animate({
-          scrollTop: $("#box").offset().top
+          scrollTop: $("h2.text-center").offset().top
       }, 2000);
   });
 
     });
     function blink(){
-    $('.stick-bot').delay(40).fadeTo(500,0.3).delay(100).fadeTo(500,1, blink);
+    $('.fa-angle-double-down').delay(40).fadeTo(500,0.3).delay(100).fadeTo(500,1, blink);
 
 }
 

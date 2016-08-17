@@ -1,8 +1,8 @@
 {% include 'head.twig' %}
 {% include 'navbar.twig' %}
 
-<form action="/spamreportv2/login/login.html">
-	<input type="text" name="pseudo" value="{{ formdata.pseudo }}">
+<form action="{{ settings.basepath }}login/" method="POST">
+	<input type="text" name="pseudo">
 	<input type="password" name="password">
 	<button type="submit">Go !</button>
 </form>

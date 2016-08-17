@@ -89,12 +89,18 @@ $router->map('GET|POST','/login/', function( ){
     include_once 'controller/Controller.php';
 });
 
+$router->map('GET|POST','/logout/', function( ){
+    $method = "logout";
+    $arg['view'] = 'logout';
+    $arg['format'] = 'html';
+    include_once 'controller/Controller.php';
+});
+
 $router->map('GET|POST','/contact/', function(){
     $method = "incoming";
     $arg['format'] = 'html';
     $arg['view'] = 'incoming';
     include_once 'controller/Controller.php';
-
 });
 
 //matching
