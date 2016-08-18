@@ -21,9 +21,9 @@ $router->map('GET|POST','/', function(  ){
 });
 
 $router->map('GET|POST','/annuaire/', function(  ){
-    $method = "incoming";
+    $method = "annuaire";
     $arg['format'] = 'html';
-    $arg['view'] = 'incoming';
+    $arg['view'] = 'annuaire';
     include_once 'controller/Controller.php';
 });
 
@@ -74,34 +74,27 @@ $router->map('GET|POST','/search/[i:term]/[a:view].[a:format]', function($term, 
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET|POST','/login/[a:view].[a:format]', function( $view, $format ){
-    $method = "login";
-    $arg['pseudo'] = $_REQUEST['pseudo'];
-    $arg['password'] = $_REQUEST['password'];
-    $arg['view'] = $view;
-    $arg['format'] = $format;
-    include_once 'controller/Controller.php';
-});
-
-$router->map('GET','/subscribe/', function( ){
+$router->map('GET|POST','/subscribe/', function( ){
     $method = "subscribe";
     $arg['view'] = 'workbench';
     $arg['format'] = 'html';
     include_once 'controller/Controller.php';
 });
 
-$router->map('POST','/subscribe/', function( ){
-    include_once 'controller/send.php';
-});
-
 $router->map('GET|POST','/login/', function( ){
     $method = "login";
-    $arg['pseudo'] = $_REQUEST['pseudo'];
-    $arg['password'] = $_REQUEST['password'];
     $arg['view'] = 'login';
     $arg['format'] = 'html';
     include_once 'controller/Controller.php';
 });
+
+$router->map('GET|POST','/logout/', function( ){
+    $method = "logout";
+    $arg['view'] = 'logout';
+    $arg['format'] = 'html';
+    include_once 'controller/Controller.php';
+});
+
 
 $router->map('GET|POST','/contact/', function(){
     $method = "contact";
@@ -118,7 +111,8 @@ $match = $router->match();
 if( $match && is_callable( $match['target'] ) ) {
 	call_user_func_array( $match['target'], $match['params'] );
 } else {
-	// no route was matched
-	// header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-	echo 'RIP 404 ZER';
+    $method = "404";
+    $arg['format'] = 'html';
+    $arg['view'] = '404';
+    include_once 'controller/Controller.php';
 }
