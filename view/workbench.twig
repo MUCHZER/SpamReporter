@@ -1,13 +1,11 @@
 {% include 'head.twig' %}
 {% include 'navbar.twig' %}
 
-{% if formdata is not empty %}
-  {% for items in formdata %}
-    {{ items }}
-  {% endfor %}
+{% if data is defined %}
+
 {% endif %}
 
-{% if formdata is empty %}
+{% if data is not defined %}
 <div class="container">
 <h2>Création de compte</h2>
 
@@ -17,42 +15,42 @@
       <label for="last" class="control-label col-xs-2">Nom</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></div>
-        <input class="form-control" type="text" name="last">
+        <input class="form-control" type="text" id="last">
       </div>
     </div>
     <div class="form-group">
       <label for="first" class="control-label col-xs-2">Prenom</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon">$</div>
-        <input class="form-control"  type="text" name="first">
+        <input class="form-control"  type="text" id="first">
       </div>
     </div>
     <div class="form-group">
       <label for="pseudo" class="control-label col-xs-2">Pseudo</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon">$</div>
-        <input class="form-control"  type="text" name="pseudo">
+        <input class="form-control"  type="text" id="pseudo">
       </div>
     </div>
     <div class="form-group">
       <label for="password" class="control-label col-xs-2">Mot de passe</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon">$</div>
-        <input class="form-control"  type="text" name="password">
+        <input class="form-control"  type="text" id="password">
       </div>
     </div>
     <div class="form-group">
       <label for="confirm" class="control-label col-xs-2">Confirmation</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon">$</div>
-        <input class="form-control"  type="text" name="confirm">
+        <input class="form-control"  type="text" id="confirm">
       </div>
     </div>
     <div class="form-group">
       <label for="email" class="control-label col-xs-2">Email</label>
       <div class="input-group col-xs-10">
         <div class="input-group-addon">$</div>
-        <input class="form-control"  type="email" name="mail">
+        <input class="form-control"  type="email" id="email">
       </div>
     </div>
     <button class="btn btn-primary btn-info" type="submit">Envoyer !</button>

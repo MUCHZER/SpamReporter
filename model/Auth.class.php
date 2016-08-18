@@ -19,138 +19,152 @@ class Auth
         $this->errMsg = array();
         $this->user = false;
         $this->secretKey = "qs;dk!5f1:lm5j;56s*dpf9mpvl";
-        $this->basedir = '/spamreportv2/';
     }
 
+    /*
+     * Function srt_random
+     *
+     * Generate random token for identification
+     *
+     * @param length of your token
+     * @return string
+     */
+    private function generateToken($length)
+    {
+        $alphabet = "0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
+        return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
+    }
 
     private function cryptPassword($uncrypted)
     {
-        $crypted = md5($uncrypted);
+        $crypted = password_hash($uncrypted, PASSWORD_BCRYPT);
         return $crypted;
     }
 
-    /**
-     * Function verifUser
+    /* Function verifUser
      *
      *
      */
     public function verifUser($array)
     {
-        $data['first'] = $this->validFname($array['first']);
-        $data['last'] = $this->validLname($array['last']);
-        $data['pseudo'] = $this->validPseudo($array['pseudo']);
-        $data['mail'] = $this->validMail($array['mail']);
-        $data['password'] = $this->validPassword($array['password']);
+        $this->validFname($array['first']);
+        $this->validLname($array['last']);
+        $this->validPseudo($array['pseudo']);
+        $this->validMail($array['mail']);
+        $this->validPassword($array['password']);
 
-        if ($this->err == 1) {
+        if ($this->$err) {
             return false;
         } else {
-            return $data;
+            return true;
         }
     }
 
-    /**
-     * Function verifUser
+    /* Function verifUser
      *
      *
      */
     public function validFname($fName)
     {
-        if (!isset($fName)) {
-            $this->err = 1;
+        if (isset($fName)) {
+            $err = 1;
             $this->errMsg[] = "Champ du Prénom vide";
         }
         if (strlen($fName) >= 45) {
-            $this->err = 1;
+            $err = 1;
             $this->errMsg[] = "Nom trop long";
         }
-        if ($this->err == 1) {
+        if ($err) {
+            $this->err = 1;
             return false;
         } else {
-            return $fName;
+            return true;
         }
     }
 
     public function validLname($lName)
     {
-        if (!isset($lName)) {
-            $this->err = 1;
+        if (isset($lName)) {
+            $err = 1;
             $this->errMsg[] = "Champ du Nom vide";
         }
         if (strlen($lName) >= 45) {
-            $this->err = 1;
+            $err = 1;
             $this->errMsg[] = "Nom trop long";
         }
-        if ($this->err == 1) {
+        if ($err) {
+            $this->err = 1;
             return false;
         } else {
-            return $lName;
+            return true;
         }
     }
 
     public function validPseudo($pseudo)
     {
-        if (!isset($pseudo)) {
-            $this->err = 1;
+        if (isset($pseudo)) {
+            $err = 1;
             $this->errMsg[] = "Champ du Pseudo vide";
         }
         if (strlen($pseudo) >= 25) {
-            $this->err = 1;
+            $err = 1;
             $this->errMsg[] = "Pseudo trop long";
         }
         $arg['pseudo'] = $pseudo;
         $check = $this->db->selectSQL("SELECT * FROM " . $this->author . " WHERE pseudo = :pseudo", $arg);
         if (!empty($check)) {
-            $this->err = 1;
+            $err = 1;
             $this->errMsg[] = "Ce pseudo est déjà utilisé";
         }
-        if ($this->err == 1) {
+        if ($err) {
             $this->err = 1;
             return false;
         } else {
-            return $pseudo;
+            return true;
         }
     }
 
     public function validMail($mail)
     {
-        if (!isset($mail)) {
-            $this->err = 1;
+        if (isset($mail)) {
+            $err = 1;
             $this->errMsg[] = "Champ du Mail vide";
         }
         if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            $this->err = 1;
+            $err = 1;
             $this->errMsg[] = "Email incorrect";
         }
-        if ($this->err == 1) {
+        if ($err) {
+            $this->err = 1;
             return false;
         } else {
-            return $mail;
+            return true;
         }
     }
 
     public function validPassword($password)
     {
-        if (!isset($password)) {
-            $this->err = 1;
+        if (isset($password)) {
+            $err = 1;
             $this->errMsg[] = "Champ du Nom vide";
         }
         if (isset($password) && strlen($password) >= 8 && strlen($password) <= 50) {
             $password = $this->cryptPassword($password);
         } else {
-            $this->err = 1;
-            $this->errMsg[] = "Mot de passe trop court!";
+            $err = 1;
+            $this->errMsg[] = "Email incorrect";
         }
-        if ($this->err == 1) {
+        if ($err) {
+            $this->err = 1;
             return false;
         } else {
-            return $password;
+            return true;
         }
     }
 
     public function checkLogin($array)
     {
-        $sql = 'SELECT * FROM ' . $this->author . ' WHERE pseudo = :pseudo AND `password` = :password';
+        $sql = "SELECT * FROM " . $this->author . " WHERE pseudo = :pseudo AND password = :password";
         $exec = array(
             'pseudo' => $array['pseudo'],
             'password' => $this->cryptPassword($array['password'])
@@ -158,19 +172,12 @@ class Auth
         $result = $this->db->selectSQL($sql, $exec);
         if (isset($result[0]['id'])) {
             $this->user = $result[0];
-            return $this->user;
+            return true;
         } else {
             return false;
         }
     }
 
-    /**
-     * Function createSessionToken
-     *
-     * Create a unique token for logged user
-     *
-     * @return bool|string
-     */
     public function createSessionToken()
     {
         if ($this->user) {
@@ -183,13 +190,6 @@ class Auth
         }
     }
 
-    /**
-     * Function checkSessionToken
-     *
-     * Check user token for identification
-     *
-     * @return bool
-     */
     public function checkSessionToken($token)
     {
         $check = explode('|', $token);
@@ -204,8 +204,7 @@ class Auth
         }
     }
 
-    /**
-     * Function getUserById
+    /* Function getUserById
      *
      */
     private function getUserById($id) {
@@ -213,46 +212,35 @@ class Auth
         return $user[0];
     }
 
-    /**
-     * @param $array
-     * @return bool|null
-     */
     public function newUser($array)
     {
-        if (empty($array))
-        {
-            return null;
-        }
-        else
-        {
-            $data = $this->verifUser($array);
-        }
-        if ($data == false) {
+        $data = $this->verifUserArray($array);
+        if ($array == false) {
             return false;
         } else {
             // generate token
-            $token = $this->createSessionToken();
+            $token = generateToken(60);
             $req = $this->db->selectSQL(
-                "INSERT INTO author SET first = :user_first, last = :user_last, pseudo = :pseudo, mail = :mail, password = :user_password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
+                "INSERT INTO author SET first = :first, last = :last, pseudo = :pseudo, mail = :mail, password = :password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
                 array(
-                    "user_first" => $data['first'],
-                    "user_last" => $data['last'],
+                    "first" => $data['first'],
+                    "last" => $data['last'],
                     "pseudo" => $data['pseudo'],
                     "mail" => $data['mail'],
-                    "user_password" => $data['password'],
-                    "ipadress" => $_SERVER['REMOTE_ADDR'],
-                    "useragent" => $_SERVER['HTTP_USER_AGENT'],
-                    "registered" => 1,
-                    "token" => $token
+                    "password" => $data['password'],
+                    "date" => $data['date'],
+                    "ipadress" => $data['ipadress'],
+                    "useragent" => $data['useragent'],
+                    "registered" => $data['registered'],
+                    "token" => $data['token']
                 ));
             // create mail confirmation
-           //$user_id = $this->db->pdo->lastInsertId();
+            $user_id = $this->db->pdo->lastInsertId();
             // On envoit l'email de confirmation
-//            mail($_POST['email'], 'Confirmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp:/leog.student.codeur.online/confirm.php?id=$user_id&token=$token");
-//            // On redirige l'utilisateur vers la page de login avec un message flash
-//            $_SESSION['flash']['success'] = 'Un mail de confirmation vous a été envoyé pour valider votre compte';
-//            header('Location: login.php');
-            return $req;
+            mail($_POST['email'], 'Confirmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp:/leog.student.codeur.online/confirm.php?id=$user_id&token=$token");
+            // On redirige l'utilisateur vers la page de login avec un message flash
+            $_SESSION['flash']['success'] = 'Un mail de confirmation vous a été envoyé pour valider votre compte';
+            header('Location: login.php');
         }
     }
 
@@ -263,24 +251,14 @@ class Auth
      */
     public function createCookie($token)
     {
-        setcookie("token", $token, time()+80000, "/");
+        setcookie("token", $token, time()+10000, "/");
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function deleteCookie()
     {
-        setcookie("token", '', time()+80000, "/");
+        setcookie("token", '', time()+10000, "/");
         return true;
-    }
-
-
-    public function disconnect()
-    {
-        $this->deleteCookie();
-        header ('location: '. $_SERVER['HTTP_REFERER']);
     }
 }
 

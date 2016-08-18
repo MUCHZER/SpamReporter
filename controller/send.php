@@ -8,15 +8,11 @@
 
 switch ($route) {
     case 'report' :
-        $auth->checkSessionToken($_COOKIE['token']);
         $array['country'] = $_REQUEST['country'];
         $array['number'] = $_REQUEST['number'];
         $array['type'] = $_REQUEST['type'];
         $array['resume'] = $_REQUEST['resume'];
-        $array['author_id'] = $auth->user['id'];
-        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . '+' . $_REQUEST['country'] . $_REQUEST['number'] . "?Type=carrier&Type=caller-name");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $array['json'] = curl_exec($curl);
+        $array['author_id'] = $_REQUEST['author'];
         $dr->addReport($array);
         $id = $dr->db->bdd->lastInsertId();
         header('Location: ../report/'.$id."/fiche.html" );

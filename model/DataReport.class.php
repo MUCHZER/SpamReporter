@@ -31,17 +31,7 @@ class DataReport
      */
     public function execute($method, $arg)
     {
-
-        //export to twig
-        $pagedata['formdata'] = $_REQUEST;
-        $pagedata['userdata'] = $this->auth->user;
-        $pagedata['settings'] = $this->settings;
-        $pagedata['user'] = $this->auth->user;
-
         switch ($method) {
-            case '404' :
-                $pagedata['results'] = '';
-                break;
             case 'search' :
                 $data = $this->searchReport($arg['term']);
                 $pagedata['search'] = $arg['term'];
@@ -50,7 +40,7 @@ class DataReport
             case 'report' :
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
-                $pagedata['json'] = json_decode($data[0]['json']);
+                //Gérer l'id non défini
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -64,22 +54,22 @@ class DataReport
                 $pagedata['results'] = $data;
                 break;
             case 'subscribe' :
-                $data = $this->auth->newUser($pagedata['formdata']);
-                $pagedata['results'] = $data;
-                break;
-            case 'logout' :
-                $this->auth->disconnect();
-                $pagedata['results'] = '';
+
                 break;
             case 'login' :
-                $login = $this->login($pagedata['formdata']);
-                if ($this->auth->user == false) {
-
+                $login = $this->login($formdata);
+                if (!$login) {
+                    $pagedata['error'] = true;
                 } else {
-                  $this->auth->createCookie($login);
+                    $this->auth->createCookie($token);
                 }
                 break;
         }
+
+        //export to twig
+        $pagedata['formdata'] = $_REQUEST;
+        $pagedata['userdata'] = $this->auth->user;
+        $pagedata['settings'] = $this->settings;
 
         switch ($arg['format']) {
             case 'json' :
@@ -94,18 +84,11 @@ class DataReport
         return $data;
     }
 
-    /**
-     * @param $formdata
-     * @return bool|string
-     */
     public function login($formdata)
     {
-        if (isset($formdata['pseudo']) && isset($formdata['password']))
-        {
-            $check = $this->auth->checkLogin($formdata);
-        }
+        $check = $this->auth->checkLogin($formdata);
 
-        if (@$check) {
+        if ($check) {
             $token = $this->auth->createSessionToken();
             return $token;
         } else {
@@ -151,22 +134,23 @@ class DataReport
      */
     public function getVote($arg)
     {
-
         $author_id = $arg['author_id'];
         $report_id = $arg['report_id'];
 
         switch ($arg['vote']) {
             case '-1' :
                 $result = $this->rateSpam($author_id, $report_id);
+                return $result;
                 break;
             case '0' :
                 $result = $this->rateNeutralSpam($author_id, $report_id);
+                return $result;
                 break;
             case '1' :
                 $result = $this->rateNoSpam($author_id, $report_id);
+                return $result;
                 break;
         }
-        return $result;
     }
 
     private function checkRate($author_id) //check si l'auteur a déjà voté
@@ -269,10 +253,9 @@ class DataReport
     public function addReport($exec)
     {
         if ($this->reportExist($exec)) {
-            $this->error = true;
-            $this->errorMsg[] = 'Doublon !!!';
+            echo '<br> Error Doublon';
         } else {
-            $sql = "INSERT INTO " . $this->report . "(`country`, `number`, `type`, `date`, `resume`, `author_id`, `json`) VALUES (:country, :number, :type, NOW(), :resume, :author_id, :json);";
+            $sql = "INSERT INTO " . $this->report . "(`country`, `number`, `type`, `date`, `resume`, `author_id`) VALUES (:country, :number, :type, NOW(), :resume, :author_id);";
             $result = $this->db->selectSQL($sql, $exec);
         }
         return $result;
@@ -344,29 +327,24 @@ class DataReport
      * @param (int)
      * @return (array)
      */
-    public function getReportList($orderby = "DESC", $limit = '8')
+    public function getReportList()
     {
         $sql = "SELECT *, report.id AS prim_key, report.date AS reportdate
                 FROM report
                 INNER JOIN author
-                ON report.author_id = author.id
-                ORDER BY report.date " . $orderby .  " LIMIT " . $limit . ";";
+                ON report.author_id = author.id;
+                ";
         $result = $this->db->selectSQL($sql);
         return $result;
     }
 
     public function checkAuth($arg, $cookie)
     {
-        $res = '';
-        if (isset($arg['pseudo']) && isset($arg['password']))
-        {
-            $res = $this->login($arg);
+        if (isset($arg['pseudo']) && isset($arg['password'])) {
+            $this->login($arg);
+        } elseif (isset($cookie['token'])) {
+            $this->auth->checkSessionToken($cookie['token']);
         }
-        elseif (isset($cookie['token']))
-        {
-            $res = $this->auth->checkSessionToken($cookie['token']);
-        }
-        return $res;
     }
 
 }
