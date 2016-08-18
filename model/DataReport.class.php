@@ -190,8 +190,11 @@ class DataReport
 
     public function removeRate($author_id)
     {
-        $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author";
-        $exec = array('author' => $author_id);
+        $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author AND report_id = :report_id";
+            $exec = array(
+                'author_id' => $author_id,
+                'report_id' => $report_id
+                );
         $result = $this->db->selectSQL($sql, $exec);
         return $result;
     }
@@ -213,7 +216,7 @@ class DataReport
             $this->removeRate($author_id);
             echo "vote supprimé";
         }else{
-            $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
+            $sql = "UPDATE ".$this->vote." SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
             $exec = array(
                 'author_id' => $author_id,
                 'report_id' => $report_id
@@ -240,7 +243,7 @@ class DataReport
             $this->removeRate($author_id);
             echo "vote supprimé";
         }else {
-            $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
+            $sql = "UPDATE ".$this->vote." SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
             $exec = array(
                 'author_id' => $author_id,
                 'report_id' => $report_id
