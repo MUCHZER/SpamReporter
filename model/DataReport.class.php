@@ -213,8 +213,11 @@ class DataReport
             $this->removeRate($author_id);
             echo "vote supprimé";
         }else{
-            $sql = "UPDATE vote SET vote = '-1' WHERE author_id = :author_id";
-            $exec = array('author_id' => $author_id);
+            $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
+            $exec = array(
+                'author_id' => $author_id,
+                'report_id' => $report_id
+                );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote mis à jour";
         }
@@ -223,7 +226,7 @@ class DataReport
 
     public function rateNoSpam($author_id, $report_id) //vote positif (vert)
     {
-        $check = $this->checkRate($author_id);
+        $check = $this->checkRate($author_id, $report_id);
         if (!$check) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
             $exec = array(
@@ -237,8 +240,11 @@ class DataReport
             $this->removeRate($author_id);
             echo "vote supprimé";
         }else {
-            $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id";
-            $exec = array('author_id' => $author_id);
+            $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id AND report_id = :report_id";
+            $exec = array(
+                'author_id' => $author_id,
+                'report_id' => $report_id
+                );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote mis à jour";
         }
