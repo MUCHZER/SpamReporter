@@ -52,7 +52,9 @@ text-align: center;
 }
 
 
-#navtop{
+
+.navbar{
+
   margin-bottom: 0px;
     border-top: 1em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
@@ -122,34 +124,4 @@ legend{
   font-size:2em;
 padding-top: 2em;
 
-}
-
-
-#acs-logo{
-	padding-bottom: 1em;
-	width: 20em;
-	height: 75px;
-}
-#navbot {
-	font-size: 0.9em;
-	height: 150px;
-	width: 100%;
-	min-height: 50px;
-	margin-top: 100px;
-	background-color: #0d4263;
-	padding-top: 35px;
-	color:#FFFFFF;
-	border-bottom: 1em solid #3e8acc;
-}
-footer{
-	height: 400px;
-	width: 100%;
-}
-/*div .cote{
-		margin-top: 0.8em;
-}*/
-
-element.style {
-    padding: 0 0 0 0px;
-    margin-top: 1em;
 }

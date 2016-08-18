@@ -2,9 +2,9 @@
 {% for item in results %}
 
 <div class="col-xs-12 col-sm-6 col-md-3">
-	<div class="panel panel-primary ">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<h3 class="panel-title"><img src="img/type{{ item.type }}.png"> +{{ item.country }} {{ item.number }} </h3>
+			<h3 class="panel-title"><!--<img src="{{ settings.basepath }}/view/img/type{{ item.type }}.png">--> +{{ item.country }} {{ item.number }} </h3>
 		</div>
 		<div class="panel-body">
 			<ul class="list-inline">
@@ -15,7 +15,7 @@
 			<h4>Nature: </h4>
 				<p class="panel-text">{{ item.resume }}</p>
 
-				<span class="text-right"><a href="report/{{ item.prim_key }}/fiche.html">En savoir plus</a></span>
+				<span class="text-right"><a href="{{ settings.basepath }}report/{{ item.prim_key }}/fiche.html">En savoir plus</a></span>
 		</div>
 	</div>
 </div>
