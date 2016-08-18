@@ -169,9 +169,6 @@ class DataReport
             case '-1' :
                 $result = $this->rateSpam($author_id, $report_id);
                 break;
-            case '0' :
-                $result = $this->rateNeutralSpam($author_id, $report_id);
-                break;
             case '1' :
                 $result = $this->rateNoSpam($author_id, $report_id);
                 break;
@@ -196,6 +193,7 @@ class DataReport
         $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author";
         $exec = array('author' => $author_id);
         $result = $this->db->selectSQL($sql, $exec);
+        return $result;
     }
 
     public function rateSpam($author_id, $report_id) //vote négatif (rouge)
@@ -211,7 +209,10 @@ class DataReport
             );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote pris en compte";
-        } else {
+        } elseif ($check['vote'] == '-1') {
+            $this->removeRate($author_id);
+            echo "vote supprimé";
+        }else{
             $sql = "UPDATE vote SET vote = '-1' WHERE author_id = :author_id";
             $exec = array('author_id' => $author_id);
             $result = $this->db->selectSQL($sql, $exec);
@@ -219,25 +220,6 @@ class DataReport
         }
     }
 
-    public function rateNeutralSpam($author_id, $report_id) //vote neutre (orange)
-    {
-        $check = $this->checkRate($author_id);
-        if (!$check) {
-            $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
-            $exec = array(
-                'report_id' => $report_id,
-                'author_id' => $author_id,
-                'vote' => '0'
-            );
-            $result = $this->db->selectSQL($sql, $exec);
-            echo "vote pris en compte";
-        } else {
-            $sql = "UPDATE vote SET vote = '0' WHERE author_id = :author_id";
-            $exec = array('author_id' => $author_id);
-            $result = $this->db->selectSQL($sql, $exec);
-            echo "vote mis à jour";
-        }
-    }
 
     public function rateNoSpam($author_id, $report_id) //vote positif (vert)
     {
@@ -251,7 +233,10 @@ class DataReport
             );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote pris en compte";
-        } else {
+        } elseif ($check['vote'] == '1') {
+            $this->removeRate($author_id);
+            echo "vote supprimé";
+        }else {
             $sql = "UPDATE vote SET vote = '1' WHERE author_id = :author_id";
             $exec = array('author_id' => $author_id);
             $result = $this->db->selectSQL($sql, $exec);
