@@ -68,8 +68,14 @@ class DataReport
                 $pagedata['results'] = $data;
                 break;
             case 'subscribe' :
-                $data = $this->auth->newUser($pagedata['formdata']);
-                $pagedata['results'] = $data;
+
+                $data = $this->auth->verifUser($pagedata['formdata']);
+                if ($data) {
+                    $data = $this->auth->newUser($pagedata['formdata']);
+                    $pagedata['results'] = $data;
+                }else{
+                    echo "error";
+                }
                 break;
             case 'logout' :
                 $this->auth->disconnect();
