@@ -87,7 +87,7 @@ class DataReport
 
         switch ($arg['format']) {
             case 'json' :
-                $data = json_encode($pagedata);
+                $data = json_encode($pagedata['results']);
                 break;
             case 'html' :
                 $data = $this->parseTwig($pagedata, $arg['view']);
