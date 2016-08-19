@@ -56,7 +56,7 @@ text-align: center;
 .navtop{
 
   margin-bottom: 0px;
-    border-top: 1em solid #3e8acc;
+    border-top: 0.6em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
 }
 .section2 .container-fluid{
@@ -132,11 +132,10 @@ padding-top: 2em;
     height: 150px;
     width: 100%;
     min-height: 50px;
-    margin-top: 100px;
     background-color: #2c2c2c;
     margin-bottom: 0px;
     color:#FFFFFF;
-    border-bottom: 1em solid #3e8acc;
+    border-bottom: 0.6em solid #3e8acc;
       text-align: center;
 
 }
@@ -145,6 +144,16 @@ padding-top: 2em;
   list-style-type:none;
 
 }
+.navbar-bottom a {
+
+      text-decoration: underline;
+      color: #ffffff;
+  }
+
+  .navbar-bottom a:hover{
+      color: #ffffff;
+  }
+
 
 footer{
 
@@ -157,4 +166,10 @@ footer{
 #P{
     font-size: 0.8em;
     margin-top: 2.2em;
+}
+#acs{
+    margin-top: 20px;
+    padding-bottom: 1em;
+    width: 20em;
+    height: 75px;
 }
