@@ -55,6 +55,7 @@ class DataReport
             case 'report' :
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
+                $comlist = $this->getComList($arg['term'])
                 $pagedata['json'] = json_decode($data[0]['json']);
                 print_r($pagedata);
                 break;
@@ -74,7 +75,6 @@ class DataReport
                 $pagedata['results'] = $data;
                 break;
             case 'subscribe' :
-
                 $data = $this->auth->verifUser($pagedata['formdata']);
                 if ($data) {
                     $data = $this->auth->newUser($pagedata['formdata']);
@@ -345,8 +345,33 @@ class DataReport
      */
     public function addComment()
     {
+        $sql = "INSERT INTO " . $this->comment . "(`comment`, `author_id`, `date`, `report_id`) VALUES (:comment, :author_id, NOW(), :report_id);";
+        $exec = array(
+            'comment' => $comment,
+            'author_id' => $author_id,
+            'report_id' => $report_id
+            );
+        $result = $this->db->selectSQL($sql, $exec);
 
+        return $result;
     }
+
+    public function getComList($orderby = "DESC")
+    {
+        $sql = "SELECT *, comment.id AS comId, comment.date AS datecom
+                FROM comment
+                INNER JOIN author
+                ON comment.author_id = author.id 
+                INNER JOIN report
+                ON comment.report_id = report.id
+                WHERE report.id = :id
+                ORDER BY comment.date " . $orderby .  " LIMIT " . $limit . ";";
+        $result = $this->db->selectSQL($sql);
+        return $result;
+    }
+
+
+
 
     /**
      * Function editComment($comment)
