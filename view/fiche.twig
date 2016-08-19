@@ -1,13 +1,15 @@
 {% include 'head.twig'  %}
 {% include 'navbar.twig'  %}
 
+<section class="section1">
+
 
 <div class="container">
-	<div class="col-sm-12 col-md-7"> 
+	<div class="col-sm-12 col-md-7">
 		<h1 class="text-center">{{ json.phone_number }}</h1>
 
 		<form class="form-inline" action="#">
-			<button class="btn btn-success col-sm-3" type="submit"> + "Non-Spam"</button>
+			<button class="btn btn-success col-sm-3 col-sm-offset-7" type="submit"> + "Non-Spam"</button>
 			<button class="btn btn-danger col-sm-3 col-sm-offset-1" type="submit">- "Spam"</button>
 		</form>
 	</div>
@@ -25,11 +27,11 @@
 		<div>
 			<h5>Remarque de l'auteur :</h5>
 			<p>{{ results.resume }}</p>
-		</div>	
+		</div>
 	</div>
-	
-</div>
 
+</div>
+</section>
 <!--
 <div id="commentArea" class="container">
 
@@ -66,4 +68,3 @@
 
 {% include 'footer.twig' %}
 {% include 'foot.twig' %}
-
