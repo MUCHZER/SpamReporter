@@ -34,14 +34,22 @@ class Auth
      *
      *
      */
-    public function verifUser($array)
+    public function verifUser($array, $registered = true)
     {
-        $data['first'] = $this->validFname($array['first']);
-        $data['last'] = $this->validLname($array['last']);
-        $data['pseudo'] = $this->validPseudo($array['pseudo']);
-        $data['mail'] = $this->validMail($array['mail']);
-        $data['password'] = $this->validPassword($array['password']);
+        // Check if user is registered
+        if ($registered) {
+            $data['first'] = $this->validFname($array['first']);
+            $data['last'] = $this->validLname($array['last']);
+            $data['pseudo'] = $this->validPseudo($array['pseudo']);
+            $data['mail'] = $this->validMail($array['mail']);
+            $data['password'] = $this->validPassword($array['password']);
+        }
+        else
+        {
+            $data['pseudo'] = $this->validPseudo($array['pseudo']);
+        }
 
+        // Verify if there is no error
         if ($this->err == 1) {
             return false;
         } else {
@@ -179,7 +187,10 @@ class Auth
             $this->token = $token;
             return $token;
         } else {
-            return false;
+            $token = md5($_SERVER['REMOTE_ADDR'] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
+            $token .= "|" . 'false';
+            $this->token = $token;
+            return $token;
         }
     }
 
@@ -217,42 +228,74 @@ class Auth
      * @param $array
      * @return bool|null
      */
-    public function newUser($array)
+    public function newUser($array, $registered = true)
     {
-        if (empty($array))
+        if ($registered)
         {
-            return null;
+            if (empty($array))
+            {
+                return null;
+            }
+            else
+            {
+                $data = $this->verifUser($array);
+            }
+            if ($data == false) {
+                return false;
+            } else {
+                // generate token
+                $token = $this->createSessionToken();
+                $req = $this->db->selectSQL(
+                    "INSERT INTO author SET first = :user_first, last = :user_last, pseudo = :pseudo, mail = :mail, password = :user_password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
+                    array(
+                        "user_first" => htmlentities($data['first']),
+                        "user_last" => htmlentities($data['last']),
+                        "pseudo" => htmlentities($data['pseudo']),
+                        "mail" => htmlentities($data['mail']),
+                        "user_password" => $data['password'],
+                        "ipadress" => $_SERVER['REMOTE_ADDR'],
+                        "useragent" => htmlentities($_SERVER['HTTP_USER_AGENT']),
+                        "registered" => 1,
+                        "token" => $token
+                    ));
+                // create mail confirmation
+               //$user_id = $this->db->pdo->lastInsertId();
+                // On envoit l'email de confirmation
+    //            mail($_POST['email'], 'Confirmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp:/leog.student.codeur.online/confirm.php?id=$user_id&token=$token");
+    //            // On redirige l'utilisateur vers la page de login avec un message flash
+    //            $_SESSION['flash']['success'] = 'Un mail de confirmation vous a été envoyé pour valider votre compte';
+    //            header('Location: login.php');
+                return $req;
+            }
         }
         else
         {
-            $data = $this->verifUser($array);
-        }
-        if ($data == false) {
-            return false;
-        } else {
-            // generate token
-            $token = $this->createSessionToken();
-            $req = $this->db->selectSQL(
-                "INSERT INTO author SET first = :user_first, last = :user_last, pseudo = :pseudo, mail = :mail, password = :user_password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
-                array(
-                    "user_first" => $data['first'],
-                    "user_last" => $data['last'],
-                    "pseudo" => $data['pseudo'],
-                    "mail" => $data['mail'],
-                    "user_password" => $data['password'],
-                    "ipadress" => $_SERVER['REMOTE_ADDR'],
-                    "useragent" => $_SERVER['HTTP_USER_AGENT'],
-                    "registered" => 1,
-                    "token" => $token
-                ));
-            // create mail confirmation
-           //$user_id = $this->db->pdo->lastInsertId();
-            // On envoit l'email de confirmation
-//            mail($_POST['email'], 'Confirmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp:/leog.student.codeur.online/confirm.php?id=$user_id&token=$token");
-//            // On redirige l'utilisateur vers la page de login avec un message flash
-//            $_SESSION['flash']['success'] = 'Un mail de confirmation vous a été envoyé pour valider votre compte';
-//            header('Location: login.php');
-            return $req;
+            if (empty($array))
+            {
+                return null;
+            }
+            else
+            {
+                $data = $this->verifUser($array, false);
+            }
+            if ($data == false) {
+                return false;
+            } else {
+                $token = $this->createSessionToken();
+                $req = $this->db->selectSQL(
+                    "INSERT INTO author SET first = :user_first, last = :user_last, pseudo = :pseudo, mail = :mail, password = :user_password, date =  NOW(), ipadress = :ipadress, useragent = :useragent, registered = :registered, token = :token",
+                    array(
+                        "user_first" => NULL,
+                        "user_last" => NULL,
+                        "pseudo" => htmlentities($data['pseudo']),
+                        "mail" => NULL,
+                        "user_password" => NULL,
+                        "ipadress" => $_SERVER['REMOTE_ADDR'],
+                        "useragent" => htmlentities($_SERVER['HTTP_USER_AGENT']),
+                        "registered" => 0,
+                        "token" => $token
+                    ));
+            }
         }
     }
 

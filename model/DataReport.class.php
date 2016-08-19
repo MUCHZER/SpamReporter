@@ -16,6 +16,7 @@ class DataReport
         $this->comment = 'comment';
         $this->error = array();
         $this->settings['basepath'] = '/spamreportv2/';
+        $this->search = '';
 
         //init auth object
         require_once 'model/Auth.class.php';
@@ -37,6 +38,7 @@ class DataReport
         $pagedata['userdata'] = $this->auth->user;
         $pagedata['settings'] = $this->settings;
         $pagedata['user'] = $this->auth->user;
+        $pagedata['reportfromsearch'] = $_REQUEST['fromsearch'];
 
         switch ($method) {
             case '404' :
@@ -46,11 +48,15 @@ class DataReport
                 $data = $this->searchReport($arg['term']);
                 $pagedata['search'] = $arg['term'];
                 $pagedata['results'] = $data;
+                if (empty($data)) {
+                    header('Location:'. $this->settings['basepath'] . 'report/?fromsearch=' . $pagedata['search']);
+                }
                 break;
             case 'report' :
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
                 $pagedata['json'] = json_decode($data[0]['json']);
+                print_r($pagedata);
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -75,6 +81,13 @@ class DataReport
                 $this->auth->disconnect();
                 $pagedata['results'] = '';
                 break;
+            case 'post' :
+                $this->auth->checkSessionToken($_COOKIE['token']);
+                $array = $this->post($pagedata['formdata']);
+                $this->addReport($array);
+                $id = $this->db->bdd->lastInsertId();
+                header('Location: ../report/'.$id."/fiche.html" );
+                break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
                 if ($this->auth->user == false) {
@@ -93,7 +106,9 @@ class DataReport
                 $data = $this->parseTwig($pagedata, $arg['view']);
                 break;
             default :
-                $data = $pagedata;
+                //$data = $pagedata;
+                $data = $this->parseTwig($pagedata, $arg['view']);
+                break;
         }
         return $data;
     }
@@ -117,9 +132,26 @@ class DataReport
         }
     }
 
-    public function logout()
-    {
-        $this->auth->deleteCookie();
+    /**
+     * @param $data
+     * @return array
+     */
+    public function post($data) {
+        $array['country'] = $data['country'];
+        $array['number'] = htmlentities($data['number']);
+        $array['type'] = $data['type'];
+        $array['resume'] = htmlentities($data['resume']);
+
+        // Check if user is logged in, else create a temp user
+        $user = $this->auth->user['id'];
+        ($user) ? $array['author_id'] = $user : $array['author_id'] = $this->auth->newUser($data['pseudo'], true);
+
+        // Twilio API connection
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . '+' . $data['country'] . $data['number'] . "?Type=carrier&Type=caller-name");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $array['json'] = curl_exec($curl);
+
+        return $array;
     }
 
 
@@ -257,8 +289,10 @@ class DataReport
     {
         $loader = new Twig_Loader_Filesystem('view/');
         $twig = new Twig_Environment($loader, array(
-            'cache' => false
+            'cache' => false,
+            'debug' => true
         ));
+        $twig->addExtension(new Twig_Extension_Debug());
         return $twig->render($view . '.twig', $data);
     }
 
