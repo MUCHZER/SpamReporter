@@ -204,15 +204,28 @@ class Auth
     public function checkSessionToken($token)
     {
         $check = explode('|', $token);
-        $checkToken = md5($check[1] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
-        $checkId = $check[1];
-        if ($checkToken == $check[0]) {
-            $this->token = $token;
-            $this->user = $this->getUserById($checkId);
-            return true;
+        if (intval($check[1]) != 0) {
+            $checkToken = md5($check[1] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
+            $checkId = $check[1];
+            if ($checkToken == $check[0]) {
+                $this->token = $token;
+                $this->user = $this->getUserById($checkId);
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            $checkToken = md5($_SERVER['REMOTE_ADDR'] . $this->secretKey . $_SERVER['HTTP_USER_AGENT']);
+            $checkId = $check[1];
+            if ($checkToken == $check[0]) {
+                $this->token = $token;
+                $this->user = $this->getUserById($checkId);
+                return true;
+            } else {
+                return false;
+            }
         }
+
     }
 
     /**
