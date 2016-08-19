@@ -30,27 +30,27 @@
 	
 </div>
 
-<!--
+
 <div id="commentArea" class="container">
 
-{ for item in item %}
+{% include 'comForm.twig'  %}
+
+{% for com in com %}
 	<div class="row">
 		<div class="col-sm-3">
-			<h5>Par : { auteur }}</h5>
-			<h5>Le: { datecomment }} </h5>
+			<h5>Par : {{ com.auteur }}</h5>
+			<h5>Le: {{ com.date }} </h5>
 		</div>
 		<div class="col-sm-9">
-			<p>{ comment }} Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+			<p>{{ com.comment }}</p>
 		</div>
-{ endfor %}
+{% endfor %}
 
 
 	</div>
 </div>
 
-
+<!-- 
 *Changer l'action du formulaire pour lier au back
 *Checker les appels twig
 *
@@ -62,7 +62,6 @@
 *
 *
 -->
-
 
 {% include 'footer.twig' %}
 {% include 'foot.twig' %}
