@@ -39,6 +39,11 @@ $router->map('POST','/post/[a:route]', function( $route ){
     include_once 'controller/Controller.php';
 });
 
+$router->map('POST','/comment/post/', function(  ){
+    $method = "commentpost";
+    include_once 'controller/Controller.php';
+});
+
 $router->map('GET|POST','/vote/[a:view].[a:format]?', function( $view, $format ){
     $method = "vote";
     $arg['vote'] = $_REQUEST['vote'];

@@ -28,28 +28,24 @@
 		</div>	
 	</div>
 	
-</div>
 
 
-<div id="commentArea" class="container">
 
+<div id="commentArea" class="">
 {% include 'comForm.twig'  %}
-
-{% for com in com %}
-	<div class="row">
-		<div class="col-sm-3">
-			<h5>Par : {{ com.auteur }}</h5>
-			<h5>Le: {{ com.date }} </h5>
+	<div class="list-group">
+	{% for id in com %}
+		<div class="list-group-item">
+			<a class="list-group-item-heading">Par : {{ id.pseudo }}</a>
+			<p class="list-group-item-text">Le: {{ id.date }} </>
+			<p class="list-group-item-text">{{ id.comment }}</>
 		</div>
-		<div class="col-sm-9">
-			<p>{{ com.comment }}</p>
-		</div>
-{% endfor %}
-
-
+	{% endfor %}
 	</div>
+
 </div>
 
+</div>
 <!-- 
 *Changer l'action du formulaire pour lier au back
 *Checker les appels twig

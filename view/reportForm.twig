@@ -9,14 +9,11 @@
 	</div>
 	{% endif %}
 
+	{% if userdata.registered == 1 %}
 	<legend> Signaler un numéro </legend>
 
-	{% if userdata.registered == 1 %}
 		Pseudo : <input type="text" name="pseudo" class="form-control" value="{{ userdata.pseudo }}" disabled>
-	{% endif %}
-	{% if userdata.registered == 0 %}
-	Pseudo : <input type="text" name="pseudo" class="form-control">
-	{% endif %}
+
 
 	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
 
@@ -57,9 +54,18 @@
 
 </div>
 </section>
+{% endif %}
 <!--
 * class align-right à définir pour le bouton
 * styles à donner aux labels
 * action à intégrer savoir ou envoyer le report
  -->
+
+{% if userdata.registered == 0 %}
+	Pour signaler un numéro vous devez vous inscrire
+	<br>
+	<a href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
+{% endif %}
+
+
 {% include 'foot.twig'  %}
