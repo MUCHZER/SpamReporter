@@ -1,58 +1,55 @@
-{% include 'head.twig'  %}
-{% include 'navbar.twig'  %}
+{% include 'head.twig' %}
+{% include 'navbar.twig' %}
 <section class="section2">
-<div class="container ">
-	{% if reportfromsearch is not empty %}
-		<br>
-	<div class="alert alert-warning" role="alert">Le numéro {{ reportfromsearch }} n'a jamais été signalé, souhaitez vous l'ajouter ?
-		<a href="{{ settings.basepath }}" class="pull-right">Annuler</a>
-	</div>
-	{% endif %}
+    <div class="container ">
+        {% if reportfromsearch is not empty %}
+            <br>
+            <div class="alert alert-warning" role="alert">Le numéro {{ reportfromsearch }} n'a jamais été signalé,
+                souhaitez vous l'ajouter ?
+                <a href="{{ settings.basepath }}" class="pull-right">Annuler</a>
+            </div>
+        {% endif %}
 
-	{% if userdata.registered == 1 %}
-	<legend> Signaler un numéro </legend>
+        {% if userdata.registered == 1 %}
+        <legend> Signaler un numéro</legend>
+        <form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
 
-		Pseudo : <input type="text" name="pseudo" class="form-control" value="{{ userdata.pseudo }}" disabled>
-
-
-	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
-
-		<div class="col-xs-12 col-md-4">
-			<label for="country">Indicatif : </label>
-			<div class="col-xs-11 col-xs-offset-1">
-				{% include 'indicatifs.html' %}
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-8">
-			<label for="number">Numéro :</label>
-			<div class="col-xs-11 col-xs-offset-1">
-				{% if reportfromsearch is not empty %}
-					<input type="text" name="number" class="form-control" value="{{ reportfromsearch }}">
-				{% endif %}
-				{% if reportfromsearch is empty %}
-					<input type="text" name="number" class="form-control">
-				{% endif %}
-			</div>
-		</div>
-		<div class="col-xs-12">
-			<label for="resume">Commentaire :</label>
-			<textarea name="resume" class="form-control " rows="5" id="comment"></textarea>
-		</div>
-		<div class="col-xs-12">
-			<label for="type">Type de nuisance :</label>
-			<select class="form-control" name="type">
-				<option value="0">SMS</option>
-				<option value="1">Téléphone</option>
-				<option value="2">Les deux</option>
-			</select>
-		</div>
+            <div class="col-xs-12 col-md-4">
+                <label for="country">Indicatif : </label>
+                <div class="col-xs-11 col-xs-offset-1">
+                    {% include 'indicatifs.html' %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <label for="number">Numéro :</label>
+                <div class="col-xs-11 col-xs-offset-1">
+                    {% if reportfromsearch is not empty %}
+                        <input type="text" name="number" class="form-control" value="{{ reportfromsearch }}">
+                    {% endif %}
+                    {% if reportfromsearch is empty %}
+                        <input type="text" name="number" class="form-control">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <label for="resume">Commentaire :</label>
+                <textarea name="resume" class="form-control " rows="5" id="comment"></textarea>
+            </div>
+            <div class="col-xs-12">
+                <label for="type">Type de nuisance :</label>
+                <select class="form-control" name="type">
+                    <option value="0">SMS</option>
+                    <option value="1">Téléphone</option>
+                    <option value="2">Les deux</option>
+                </select>
+            </div>
 
 
-		<input type="text" name="author" hidden value="1">
-		<input type="submit" class=" btn btn-primary btn-info col-md-offset-11">
-	</form>
+            <input type="text" name="author" hidden value="1">
+            <input type="submit" class=" btn btn-primary btn-info col-md-offset-11">
+        </form>
 
-</div>
+    </div>
 </section>
 {% endif %}
 <!--
@@ -62,10 +59,16 @@
  -->
 
 {% if userdata.registered == 0 %}
-	Pour signaler un numéro vous devez vous inscrire
-	<br>
-	<a href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
+    <br>
+    <div class="alert alert-info" role="alert">
+        Pour signaler un numéro vous devez vous connecter
+        <br>
+        <a href="{{ settings.basepath }}login/">Se connecter <a/>-
+        <a href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
+    </div>
 {% endif %}
 
-{% include 'footer.twig'  %}
-{% include 'foot.twig'  %}
+</div>
+
+{% include 'footer.twig' %}
+{% include 'foot.twig' %}

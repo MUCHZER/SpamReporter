@@ -1,49 +1,51 @@
-{% include 'head.twig'  %}
-{% include 'navbar.twig'  %}
+{% include 'head.twig' %}
+{% include 'navbar.twig' %}
 
 
-<div class="container">
-	<div class="col-sm-12 col-md-7"> 
-		<h1 class="text-center">{{ json.phone_number }}</h1>
+<div class="container page-header">
+    <div class="col-sm-12 col-md-7">
+        <h1 class="text-center">{{ results.number }}</h1>
 
-		<form class="form-inline" action="#">
-			<button class="btn btn-success col-sm-3" type="submit"> + "Non-Spam"</button>
-			<button class="btn btn-danger col-sm-3 col-sm-offset-1" type="submit">- "Spam"</button>
-		</form>
-	</div>
+        <form class="form-inline" action="{{ settings.basepath }}vote/" method="POST">
+            <button class="btn btn-success col-sm-3" type="submit" value="1" name="vote" data-toggle="tooltip" data-placement="top" title="Ce n'est pas un spam !"><i class="fa fa-thumbs-o-up fa-4x" aria-hidden="true"></i><br> {{ results.positive }}</button>
+            <button class="btn btn-danger col-sm-3 col-sm-offset-1" type="submit" value="-1" name="vote" data-toggle="tooltip" data-placement="top" title="C'est un spam !"><i class="fa fa-thumbs-o-down fa-4x" aria-hidden="true"></i> <br> {{ results.negative }}</button>
+            <input type="text" name="report_id" value="{{ results.prim_key }}" hidden>
+        </form>
+    </div>
 
-	<div class="col-sm-12 col-md-5">
-		<div>
-			<span class="title">Signalé le : </span>
-			<span>{{ results.datespam }}</span>
-			<!--<img src="{{ settings.basepath }}img/type{{ results.type }}.png" class="float-right">-->
-		</div>
-		<div>
-			<span class="title">Signalé par :</span>
-			<span>{{ results.pseudo }}</span>
-		</div>
-		<div>
-			<h5>Remarque de l'auteur :</h5>
-			<p>{{ results.resume }}</p>
-		</div>	
-	</div>
-	
+    <div class="col-sm-12 col-md-5">
+        <div class="text-center">
+            <span class="title text-primary">Signalé le : </span>
+            <p>{{ results.datespam }}</p>
+            <!--<img src="{{ settings.basepath }}img/type{{ results.type }}.png" class="float-right">-->
+            <hr>
+        </div>
+        <div class="text-center">
+            <span class="title text-primary">Signalé par :</span>
+            <p>{{ results.pseudo }}</p>
+            <hr>
+
+        </div>
+        <div class="text-center">
+            <span class="text-primary">Remarque de l'auteur :</span>
+            <p>{{ results.resume }}</p>
+        </div>
+    </div>
 
 
+    <div id="commentArea" class="">
+        {% include 'comForm.twig' %}
+        <div class="list-group">
+            {% for id in com %}
+                <div class="list-group-item">
+                    <p class="list-group-item-heading">Par : {{ id.pseudo }}</p>
+                    <p class="list-group-item-text">Le: {{ id.date }} </p>
+                    <p class="list-group-item-text">{{ id.comment }}</p>
+                </div>
+            {% endfor %}
+        </div>
 
-<div id="commentArea" class="">
-{% include 'comForm.twig'  %}
-	<div class="list-group">
-	{% for id in com %}
-		<div class="list-group-item">
-			<a class="list-group-item-heading">Par : {{ id.pseudo }}</a>
-			<p class="list-group-item-text">Le: {{ id.date }} </>
-			<p class="list-group-item-text">{{ id.comment }}</>
-		</div>
-	{% endfor %}
-	</div>
-
-</div>
+    </div>
 
 </div>
 <!-- 

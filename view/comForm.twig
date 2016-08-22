@@ -1,21 +1,18 @@
 
-
+{% if userdata.registered == 1 %}
 <form action="{{ settings.basepath }}comment/post/" method="POST">
-
-	<div class="col-xs-12">
-		{% if userdata.registered == 1 %}
-			Pseudo : <input type="text" name="pseudo" class="form-control" value="{{ userdata.pseudo }}" disabled>
-		{% endif %}
-		{% if userdata.registered == 0 %}
-			Pseudo : <input type="text" name="pseudo" class="form-control">
-		{% endif %}
-	</div>
 
 	<div class="col-xs-12">
 		<label for="resume">Commentaire :</label>
 		<textarea name="comment" class="form-control " rows="5" id="comment"></textarea>
 	</div>
-	<input type="hidden" name="report_id" value="{{ results.prim_key }}">
 
+	<input type="hidden" name="report_id" value="{{ results.prim_key }}">
 	<input type="submit" class=" btn btn-primary btn-info col-md-offset-11">
+
 </form>
+{% endif %}
+
+{% if userdata.registered == 0 %}
+	<p class="">Veuillez vous connecter pour écrire un commentaire !</p>
+{% endif %}
