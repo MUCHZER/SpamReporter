@@ -2,8 +2,18 @@
 {% include 'navbar.twig'  %}
 <section class="section1">
 <div class="container ">
+	{% if reportfromsearch is not empty %}
+		<br>
+	<div class="alert alert-warning" role="alert">Le numéro {{ reportfromsearch }} n'a jamais été signalé, souhaitez vous l'ajouter ?
+		<a href="{{ settings.basepath }}" class="pull-right">Annuler</a>
+	</div>
+	{% endif %}
 
-<legend> Signaler un numéro </legend>
+	{% if userdata.registered == 1 %}
+	<legend> Signaler un numéro </legend>
+
+		Pseudo : <input type="text" name="pseudo" class="form-control" value="{{ userdata.pseudo }}" disabled>
+
 
 	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
 
@@ -16,7 +26,12 @@
 		<div class="col-xs-12 col-md-8">
 			<label for="number">Numéro :</label>
 			<div class="col-xs-11 col-xs-offset-1">
-				<input type="text" name="number" class="form-control">
+				{% if reportfromsearch is not empty %}
+					<input type="text" name="number" class="form-control" value="{{ reportfromsearch }}">
+				{% endif %}
+				{% if reportfromsearch is empty %}
+					<input type="text" name="number" class="form-control">
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-xs-12">
@@ -39,9 +54,18 @@
 
 </div>
 </section>
+{% endif %}
 <!--
 * class align-right à définir pour le bouton
 * styles à donner aux labels
 * action à intégrer savoir ou envoyer le report
  -->
+
+{% if userdata.registered == 0 %}
+	Pour signaler un numéro vous devez vous inscrire
+	<br>
+	<a href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
+{% endif %}
+
+
 {% include 'foot.twig'  %}

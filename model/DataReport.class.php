@@ -15,7 +15,9 @@ class DataReport
         $this->report = 'report';
         $this->comment = 'comment';
         $this->error = array();
+        $this->settings = [];
         $this->settings['basepath'] = '/spamreportv2/';
+        $this->search = '';
 
         //init auth object
         require_once 'model/Auth.class.php';
@@ -37,6 +39,7 @@ class DataReport
         $pagedata['userdata'] = $this->auth->user;
         $pagedata['settings'] = $this->settings;
         $pagedata['user'] = $this->auth->user;
+        $pagedata['reportfromsearch'] = $_REQUEST['fromsearch'];
 
         switch ($method) {
             case '404' :
@@ -46,11 +49,22 @@ class DataReport
                 $data = $this->searchReport($arg['term']);
                 $pagedata['search'] = $arg['term'];
                 $pagedata['results'] = $data;
+                if (empty($data)) {
+                    header('Location:'. $this->settings['basepath'] . 'report/?fromsearch=' . $pagedata['search']);
+                }
                 break;
             case 'report' :
                 $data = $this->getReportById($arg['term']);
                 $pagedata['results'] = $data[0];
+                $pagedata['com'] = $this->getComList($arg['term']);
                 $pagedata['json'] = json_decode($data[0]['json']);
+                break;
+            case 'commentpost' :
+                $this->auth->checkSessionToken($_COOKIE['token']);
+                $data = [$pagedata['formdata'], $this->auth->user];
+                $this->addComment($data);
+                //$id = $this->db->bdd->lastInsertId();
+                header('Location: ' . $this->settings['basepath'] . 'report/' . $data[0]['report_id'] . '/fiche.html');
                 break;
             case 'reportlist' :
                 $data = $this->getReportList();
@@ -68,18 +82,24 @@ class DataReport
                 $pagedata['results'] = $data;
                 break;
             case 'subscribe' :
-
                 $data = $this->auth->verifUser($pagedata['formdata']);
                 if ($data) {
                     $data = $this->auth->newUser($pagedata['formdata']);
                     $pagedata['results'] = $data;
                 }else{
-                    echo "error";
+
                 }
                 break;
             case 'logout' :
                 $this->auth->disconnect();
                 $pagedata['results'] = '';
+                break;
+            case 'post' :
+                $this->auth->checkSessionToken($_COOKIE['token']);
+                $array = $this->post($pagedata['formdata']);
+                $this->addReport($array);
+                $id = $this->db->bdd->lastInsertId();
+                header('Location: ../report/'.$id."/fiche.html" );
                 break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
@@ -99,7 +119,9 @@ class DataReport
                 $data = $this->parseTwig($pagedata, $arg['view']);
                 break;
             default :
-                $data = $pagedata;
+                //$data = $pagedata;
+                $data = $this->parseTwig($pagedata, $arg['view']);
+                break;
         }
         return $data;
     }
@@ -123,9 +145,26 @@ class DataReport
         }
     }
 
-    public function logout()
-    {
-        $this->auth->deleteCookie();
+    /**
+     * @param $data
+     * @return array
+     */
+    public function post($data) {
+        $array['country'] = $data['country'];
+        $array['number'] = htmlentities($data['number']);
+        $array['type'] = $data['type'];
+        $array['resume'] = htmlentities($data['resume']);
+
+        // Check if user is logged in, else create a temp user
+        $user = $this->auth->user['id'];
+        ($user) ? $array['author_id'] = $user : $array['author_id'] = $this->auth->newUser($data['pseudo'], false);
+
+        // Twilio API connection
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . '+' . $data['country'] . $data['number'] . "?Type=carrier&Type=caller-name");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $array['json'] = curl_exec($curl);
+
+        return $array;
     }
 
 
@@ -257,8 +296,10 @@ class DataReport
     {
         $loader = new Twig_Loader_Filesystem('view/');
         $twig = new Twig_Environment($loader, array(
-            'cache' => false
+            'cache' => false,
+            'debug' => true
         ));
+        $twig->addExtension(new Twig_Extension_Debug());
         return $twig->render($view . '.twig', $data);
     }
 
@@ -309,10 +350,35 @@ class DataReport
      * @param (array)
      * @return (bool) true if it works
      */
-    public function addComment()
+    public function addComment($array)
     {
+        $sql = "INSERT INTO " . $this->comment . "(`comment`, `author_id`, `date`, `report_id`) VALUES (:comment, :author_id, NOW(), :report_id);";
+        $exec = array(
+            'comment' => $array[0]['comment'],
+            'author_id' => $array[1]['id'],
+            'report_id' => $array[0]['report_id']
+            );
+        $result = $this->db->selectSQL($sql, $exec);
 
+        return $result;
     }
+
+    public function getComList($id, $orderby = "DESC", $limit = '500')
+    {
+        $sql = "SELECT *, comment.id AS comId, comment.date AS datecom
+                FROM comment
+                INNER JOIN author
+                ON comment.author_id = author.id 
+                INNER JOIN report
+                ON comment.report_id = report.id
+                WHERE report.id = $id
+                ORDER BY comment.date " . $orderby .  " LIMIT " . $limit . ";";
+        $result = $this->db->selectSQL($sql);
+        return $result;
+    }
+
+
+
 
     /**
      * Function editComment($comment)

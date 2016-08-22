@@ -35,7 +35,13 @@ $router->map('GET|POST','/report/', function( ){
 });
 
 $router->map('POST','/post/[a:route]', function( $route ){
-    include_once 'controller/send.php';
+    $method = "post";
+    include_once 'controller/Controller.php';
+});
+
+$router->map('POST','/comment/post/', function(  ){
+    $method = "commentpost";
+    include_once 'controller/Controller.php';
 });
 
 $router->map('GET|POST','/vote/[a:view].[a:format]?', function( $view, $format ){
