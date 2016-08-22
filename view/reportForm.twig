@@ -11,10 +11,6 @@
 
 	{% if userdata.registered == 1 %}
 	<legend> Signaler un numéro </legend>
-
-		Pseudo : <input type="text" name="pseudo" class="form-control" value="{{ userdata.pseudo }}" disabled>
-
-
 	<form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
 
 		<div class="col-xs-12 col-md-4">
