@@ -53,10 +53,10 @@ text-align: center;
 
 
 
-.navbar{
+.navtop{
 
   margin-bottom: 0px;
-    border-top: 1em solid #3e8acc;
+    border-top: 0.6em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
 }
 .section2 .container-fluid{
@@ -89,10 +89,12 @@ text-align: center;
 .section1 button{
 height: 3.5em;
 
+
 }
 
 .section2{
     min-height: 95vh;
+
 }
 .section2 h2 {
 padding:2em 0;
@@ -124,4 +126,50 @@ legend{
   font-size:2em;
 padding-top: 2em;
 
+}
+.navbar-bottom {
+    font-size: 0.9em;
+    height: 150px;
+    width: 100%;
+    min-height: 50px;
+    background-color: #2c2c2c;
+    margin-bottom: 0px;
+    color:#FFFFFF;
+    border-bottom: 0.6em solid #3e8acc;
+      text-align: center;
+
+}
+.navbar-bottom li {
+  padding-top: 10px;
+  list-style-type:none;
+
+}
+.navbar-bottom a {
+
+      text-decoration: underline;
+      color: #ffffff;
+  }
+
+  .navbar-bottom a:hover{
+      color: #ffffff;
+  }
+
+
+footer{
+
+    width: 100%;
+}
+#cote{
+    margin-top: 1.6em;
+}
+
+#P{
+    font-size: 0.8em;
+    margin-top: 2.2em;
+}
+#acs{
+    margin-top: 20px;
+    padding-bottom: 1em;
+    width: 20em;
+    height: 75px;
 }
