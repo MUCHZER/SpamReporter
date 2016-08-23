@@ -1,0 +1,17 @@
+{% include 'head.twig' %}
+{% include 'navbar.twig' %}
+<section class="section1">
+  {% if "resultat de la recherche"==0  %}
+  <h2 class="text-center" >Votre recherche n'a donné aucun résultat</h2>
+  <p class="">
+    Désirez vous essayer un autre numéro ?
+  </p>
+  {% include search.twig %}
+
+
+
+</section>
+
+
+{% include 'footer.twig' %}
+{% include 'foot.twig' %}
