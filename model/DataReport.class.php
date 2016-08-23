@@ -67,7 +67,7 @@ class DataReport
                 header('Location: ' . $this->settings['basepath'] . 'report/' . $data[0]['report_id'] . '/fiche.html');
                 break;
             case 'reportlist' :
-                $data = $this->getReportList();
+                $data = $this->getSpamAwards();
                 $pagedata['results'] = $data;
                 break;
             case 'annuaire' :
@@ -99,7 +99,7 @@ class DataReport
                 $array = $this->post($pagedata['formdata']);
                 $this->addReport($array);
                 $id = $this->db->bdd->lastInsertId();
-                header('Location: ../report/'.$id."/fiche.html" );
+                header('Location: ' . $this->settings['basepath'] . 'report/'.$id."/fiche.html" );
                 break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
@@ -107,6 +107,7 @@ class DataReport
 
                 } else {
                   $this->auth->createCookie($login);
+                    header('Location: ' . $this->settings['basepath'] . '');
                 }
                 break;
         }
@@ -124,6 +125,13 @@ class DataReport
                 break;
         }
         return $data;
+    }
+
+    public function getSpamAwards() {
+
+
+        $result = $this->db->selectSQL($sql);
+        return $result;
     }
 
     /**
@@ -229,10 +237,10 @@ class DataReport
         return $result;
     }
 
-    private function checkRate($author_id) //check si l'auteur a déjà voté
+    private function checkRate($author_id, $report_id) //check si l'auteur a déjà voté
     {
-        $sql = "SELECT * FROM " . $this->vote . " WHERE author_id = :author";
-        $exec = array('author' => $author_id);
+        $sql = "SELECT * FROM " . $this->vote . " WHERE author_id = :author AND report_id = :report";
+        $exec = array('author' => $author_id, 'report' => $report_id);
         $result = $this->db->selectSQL($sql, $exec);
         if ($result) {
             return $result;
@@ -254,7 +262,7 @@ class DataReport
 
     public function rateSpam($author_id, $report_id) //vote négatif (rouge)
     {
-        $check = $this->checkRate($author_id);
+        $check = $this->checkRate($author_id, $report_id);
 
         if (empty($check)) {
             $sql = "INSERT INTO " . $this->vote . " (`report_id`, `author_id`, `vote`, `date`) VALUES (:report_id, :author_id, :vote, NOW())";
