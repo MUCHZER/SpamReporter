@@ -70,6 +70,10 @@ text-align: center;
     font-size: 0.8em;
 
 }
+.panel-heading{
+min-height:
+
+}
 .panel-body{
     min-height:12em;
     max-height:12em;
@@ -84,10 +88,11 @@ text-align: center;
 .section1{
     background-color: #cccccc;
     min-height: 95vh;
-
+    background-image: url(https://unsplash.it/1920/1080/?random);
 
 }
 .section1 button{
+
 height: 3.5em;
 
 
