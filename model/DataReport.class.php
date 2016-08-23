@@ -115,7 +115,6 @@ if ($check) {
                 }
                 break;
         }
-
         switch ($arg['format']) {
             case 'json' :
                 $data = json_encode($pagedata['results']);
