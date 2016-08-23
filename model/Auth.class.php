@@ -320,7 +320,7 @@ class Auth
     public function disconnect()
     {
         $this->deleteCookie();
-        header ('location: '. $_SERVER['HTTP_REFERER']);
+        return true;
     }
 }
 

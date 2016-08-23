@@ -93,6 +93,7 @@ class DataReport
             case 'logout' :
                 $this->auth->disconnect();
                 $pagedata['results'] = '';
+                header ('location: '. $this->settings['basepath'] );
                 break;
             case 'post' :
                 $this->auth->checkSessionToken($_COOKIE['token']);
@@ -129,7 +130,13 @@ class DataReport
 
     public function getSpamAwards() {
 
-
+        $sql = "SELECT *, sum(vote.vote) AS nb, report.id AS prim_key, report.date AS datespam
+                FROM report
+                INNER JOIN vote
+                ON vote.report_id = report.id
+                GROUP BY report.id
+                ORDER BY nb ASC
+                LIMIT 8";
         $result = $this->db->selectSQL($sql);
         return $result;
     }
