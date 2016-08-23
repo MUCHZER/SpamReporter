@@ -5,10 +5,9 @@ class db
 
   function __construct() {
     $this->orderby = false;
-
-    $username = "valentinr"; // Votre nom d'utilisateur
-    $password = "JqsWM87PwX"; // Votre mot de passe
-    $this->database = "phonespam_B"; // Le nom de la base de donnée
+    $this->username = ""; // Votre nom d'utilisateur
+    $this->password = ""; // Votre mot de passe
+    $this->database = ""; // Le nom de la base de donnée
     $this->hostname = "localhost"; // l'adresse du serveur mysql (le nom de l'hôte)
     $this->error = 0; // init l'erreur a 0
     $this->debug = 0;
