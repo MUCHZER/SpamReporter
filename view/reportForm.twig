@@ -46,10 +46,16 @@
 
 
             <input type="text" name="author" hidden value="1">
-            <input type="submit" class=" btn btn-primary btn-info col-md-offset-11">
+            <div class="form-group">
+              <label class="control-label" for="singlebutton"></label>
+              <div class="">
+                <button id="singlebutton" name="singlebutton" class="btn btn-lg btn-primary btn-info pull-right">Signaler</button>
+              </div>
+            </div>
         </form>
 
     </div>
+
 </section>
 {% endif %}
 <!--
@@ -60,12 +66,16 @@
 
 {% if userdata.registered == 0 %}
     <br>
-    <div class="alert alert-info" role="alert">
-        Pour signaler un numéro vous devez vous connecter
-        <br>
-        <a href="{{ settings.basepath }}login/">Se connecter <a/>-
-        <a href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
-    </div>
+    <section class="section2">
+      <div class="alert alert-info" role="alert">
+          Pour signaler un numéro vous devez vous connecter
+          <br>
+
+          <a class="btn btn-primary btn-info" href="#" data-toggle="modal" data-target="#login-modal">Se connecter <a/> -
+          <a class="btn btn-primary btn-info" href="{{ settings.basepath }}subscribe/">S'inscrire <a/>
+      </div>
+    </section>
+
 {% endif %}
 
 </div>

@@ -1,11 +1,17 @@
 <nav class="navbar navbar-inverse navtop">
 	<div class="container-fluid">
 		<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			 <span class="sr-only">Toggle navigation</span>
+			 <span class="icon-bar"></span>
+			 <span class="icon-bar"></span>
+			 <span class="icon-bar"></span>
+		 </button>
 			<a class="navbar-brand" href="{{ settings.basepath }}">SPAM REPORTER</a>
 		</div>
-		<div class="collapse navbar-collapse" id="spamReporterNav">
-			<ul class="nav navbar-nav">
 
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
 				<li><a href="{{ settings.basepath }}report/">Signaler</a></li>
 				<li><a href="{{ settings.basepath }}contact/">Nous contacter</a></li>
 				<li><a href="{{ settings.basepath }}annuaire/">Annuaire</a></li>
@@ -22,7 +28,29 @@
 			<!-- else -->
             {% if user is empty %}
             <ul class="nav navbar-nav navbar-right">
-				<li><a href="{{ settings.basepath }}login/">Se connecter</a></li>
+
+
+				<li>
+				<a href="#" data-toggle="modal" data-target="#login-modal">Se connecter</a>
+
+				<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog">
+						<div class="loginmodal-container">
+								<h1>Login to Your Account</h1><br>
+									<form method="post" action="{{ settings.basepath }}login/">
+										<input type="text" name="pseudo" placeholder="Pseudo">
+										<input type="password" name="password" placeholder="Mot de passe">
+										<input type="submit" name="login" class="login loginmodal-submit" value="Login">
+									</form>
+
+							<div class="login-help">
+								<a href="#">Créer un compte</a>
+							</div>
+						</div>
+				</div>
+
+					</div>
+					</li>
 				<li><a href="{{ settings.basepath }}subscribe/">Créer un compte</a></li>
 			</ul>
             {% endif %}

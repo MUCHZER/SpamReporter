@@ -106,7 +106,7 @@ class DataReport
                 if ($this->auth->user == false) {
 
                 } else {
-                  $this->auth->createCookie($login);
+                    $this->auth->createCookie($login);
                     header('Location: ' . $this->settings['basepath'] . '');
                 }
                 break;
@@ -252,10 +252,10 @@ class DataReport
     public function removeRate($author_id, $report_id)
     {
         $sql = "DELETE FROM " . $this->vote . " WHERE author_id = :author_id AND report_id = :report_id";
-            $exec = array(
-                'author_id' => $author_id,
-                'report_id' => $report_id
-                );
+        $exec = array(
+            'author_id' => $author_id,
+            'report_id' => $report_id
+        );
         $result = $this->db->selectSQL($sql, $exec);
         return $result;
     }
@@ -282,7 +282,7 @@ class DataReport
             $exec = array(
                 'author_id' => $author_id,
                 'report_id' => $report_id
-                );
+            );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote mis à jour";
         }
@@ -311,7 +311,7 @@ class DataReport
             $exec = array(
                 'author_id' => $author_id,
                 'report_id' => $report_id
-                );
+            );
             $result = $this->db->selectSQL($sql, $exec);
             echo "vote mis à jour";
         }
@@ -382,7 +382,7 @@ class DataReport
             'comment' => $array[0]['comment'],
             'author_id' => $array[1]['id'],
             'report_id' => $array[0]['report_id']
-            );
+        );
         $result = $this->db->selectSQL($sql, $exec);
 
         return $result;

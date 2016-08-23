@@ -7,7 +7,7 @@ include 'vendor/autoload.php';
 
 // router init
 $router = new AltoRouter();
-$router->setBasePath('/spamreportv2');
+$router->setBasePath('/Projetacs/Pas_fini/SpamReporter-master/SpamReporter');
 
 
 /*
