@@ -1,0 +1,26 @@
+{% include 'head.twig' %}
+{% include 'navbar.twig' %}
+<section class="section2">
+  {% if results is empty  %}
+      <h2 class="text-center" >Votre recherche n'a donné aucun résultat</h2>
+      <p class="">
+        Désirez vous essayer un autre numéro ?
+      </p>
+      {% include 'search.twig' %}
+  {% endif %}
+
+{% if results is not empty " %}
+  <h2 class="text-center" > Votre recherche a donné {{ results|length }} resultats</h2>
+  <div class="container-fluid">
+    {% include 'box.twig' %}
+  </div>
+
+
+{% endif %}
+
+
+</section>
+
+
+{% include 'footer.twig' %}
+{% include 'foot.twig' %}
