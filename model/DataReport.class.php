@@ -94,13 +94,16 @@ class DataReport
                 $this->auth->disconnect();
                 $pagedata['results'] = '';
                 header ('location: '. $this->settings['basepath'] );
-                break;
-            case 'post' :
+                break;case 'post' :
                 $this->auth->checkSessionToken($_COOKIE['token']);
+
+$check = $this->checkNumValid(xxxxxxxxxxxx)
+if ($check) {
                 $array = $this->post($pagedata['formdata']);
                 $this->addReport($array);
                 $id = $this->db->bdd->lastInsertId();
-                header('Location: ' . $this->settings['basepath'] . 'report/'.$id."/fiche.html" );
+                header('Location: ../report/'.$id."/fiche.html" );
+}else{}
                 break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
@@ -112,7 +115,6 @@ class DataReport
                 }
                 break;
         }
-
         switch ($arg['format']) {
             case 'json' :
                 $data = json_encode($pagedata['results']);
@@ -126,6 +128,18 @@ class DataReport
                 break;
         }
         return $data;
+    }
+    public function checkNumValid($num)
+    {
+        // Twilio API connection
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $num . "?Type=carrier&Type=caller-name");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $check = json_decode( curl_exec($curl), 1 );
+
+        if ($check['status']== '404') {
+            return false;
+        }else{return true;}
+
     }
 
     public function getSpamAwards() {
@@ -175,7 +189,7 @@ class DataReport
         ($user) ? $array['author_id'] = $user : $array['author_id'] = $this->auth->newUser($data['pseudo'], false);
 
         // Twilio API connection
-        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . '+' . $data['country'] . $data['number'] . "?Type=carrier&Type=caller-name");
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $data['number'] . "?Type=carrier&Type=caller-name");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $array['json'] = curl_exec($curl);
 
