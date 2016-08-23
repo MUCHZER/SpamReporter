@@ -44,17 +44,12 @@ $router->map('POST','/comment/post/', function(  ){
     include_once 'controller/Controller.php';
 });
 
-$router->map('GET|POST','/vote/[a:view].[a:format]?', function( $view, $format ){
+$router->map('GET|POST','/vote/', function(  ){
+    print_r($_REQUEST);
     $method = "vote";
-    $arg['vote'] = $_REQUEST['vote'];
-    //$arg['author_token'] = $_REQUEST['author_token'];
-    $arg['author_token'] = $_REQUEST[1];
-    // $arg['post_id'] = $_REQUEST['post_id'];
-    $arg['post_id'] = $_REQUEST[80];
-    $arg['format'] = $format;
-    $arg['view'] = $view;
     include_once 'controller/Controller.php';
 });
+
 
 $router->map('GET|POST','/report/[i:id]/[a:view].[a:format]?', function( $id, $view, $format ){
     $method = "report";
@@ -68,7 +63,7 @@ $router->map('POST','/search/', function(){
     $method = "search";
     $arg['term'] =  $_REQUEST['search'] ;
     $arg['format'] = 'html';
-    $arg['view'] = 'index';
+    $arg['view'] = 'searchResult';
     include_once 'controller/Controller.php';
 });
 
