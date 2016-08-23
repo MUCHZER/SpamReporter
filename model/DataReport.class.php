@@ -16,7 +16,7 @@ class DataReport
         $this->comment = 'comment';
         $this->error = array();
         $this->settings = [];
-        $this->settings['basepath'] = '/spamreportv2/';
+        $this->settings['basepath'] = '/Projetacs/Pas_fini/SpamReporter-master/SpamReporter/';
         $this->search = '';
 
         //init auth object
@@ -368,7 +368,7 @@ class DataReport
         $sql = "SELECT *, comment.id AS comId, comment.date AS datecom
                 FROM comment
                 INNER JOIN author
-                ON comment.author_id = author.id 
+                ON comment.author_id = author.id
                 INNER JOIN report
                 ON comment.report_id = report.id
                 WHERE report.id = $id
