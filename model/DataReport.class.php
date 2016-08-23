@@ -14,10 +14,11 @@ class DataReport
         $this->vote = 'vote';
         $this->report = 'report';
         $this->comment = 'comment';
-        $this->error = array();
+        $this->error = [];
         $this->settings = [];
         $this->settings['basepath'] = '/spamreportv2/';
         $this->search = '';
+        $this->errorMsg = [];
 
         //init auth object
         require_once 'model/Auth.class.php';
@@ -113,6 +114,8 @@ class DataReport
                 break;
         }
 
+        $pagedata['errorMsg'] = $this->errorMsg;
+
         switch ($arg['format']) {
             case 'json' :
                 $data = json_encode($pagedata['results']);
@@ -182,7 +185,14 @@ class DataReport
         return $array;
     }
 
-
+    /**
+     * Function searchReport
+     *
+     * Take term as param and return the array of results
+     *
+     * @param (string)
+     * @return (array|bool)
+     */
     public function searchReport($term)
     {
         $sql = "SELECT * FROM " . $this->report . " WHERE number LIKE :term";
@@ -216,8 +226,17 @@ class DataReport
         return $result;
     }
 
+    /**
+     * Function countSpam
+     *
+     * Count positive or negative spam from an id
+     *
+     * @param (int)
+     * @param (-1 or 1)
+     * @return (int)
+     */
     public function countSpam($id, $rate) {
-        //$sql = "SELECT nb.spam, vote.* FROM vote, (select COUNT(*) AS spam FROM vote WHERE vote = '-1') nb WHERE vote = '-1' AND report_id = :id";
+
         $sql = "SELECT COUNT(*) AS count FROM vote WHERE vote = :rate AND report_id = :id";
         $exec = array(':id' => $id, ':rate' => $rate);
         $result = $this->db->selectSQL($sql, $exec);
@@ -226,6 +245,11 @@ class DataReport
     }
 
     /**
+     * Function getVote
+     *
+     * Check if user is logged and send a vote
+     *
+     * @param array
      * @return string
      */
     public function getVote($arg)
