@@ -17,6 +17,9 @@
     function blink(){
     $('.fa-angle-double-down').delay(40).fadeTo(500,0.3).delay(100).fadeTo(500,1, blink);
 
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
 }
 </script>
 
