@@ -14,7 +14,7 @@ class DataReport
         $this->vote = 'vote';
         $this->report = 'report';
         $this->comment = 'comment';
-        $this->error = [];
+        $this->error = false;
         $this->settings = [];
         $this->settings['basepath'] = '/spamreportv2/';
         $this->search = '';
@@ -41,6 +41,8 @@ class DataReport
         $pagedata['settings'] = $this->settings;
         $pagedata['user'] = $this->auth->user;
         $pagedata['reportfromsearch'] = $_REQUEST['fromsearch'];
+
+
 
         switch ($method) {
             case '404' :
@@ -98,16 +100,16 @@ class DataReport
                 break;
             case 'post' :
                 $this->auth->checkSessionToken($_COOKIE['token']);
-                $check = $this->checkNumValid($pagedata['formdata']['number']);
-                print_r($pagedata['formdata']['number']);
-                if ($check == true) {
+                $check = $this->checkNumValid($pagedata['formdata']['country'] . $pagedata['formdata']['number']);
+                if ($check['status'] == "404") {
+                    $pagedata['errorMsg'] = $this->errorMsg;
+                    $pagedata['results'] = '';
+                } else
+                {
                     $array = $this->post($pagedata['formdata']);
                     $this->addReport($array);
                     $id = $this->db->bdd->lastInsertId();
                     header('Location: ../report/'.$id."/fiche.html" );
-                }
-                else {
-                    print_r( $this->errorMsg );
                 }
                 break;
             case 'login' :
@@ -121,7 +123,6 @@ class DataReport
                 break;
         }
 
-        $pagedata['errorMsg'] = $this->errorMsg;
 
         switch ($arg['format']) {
             case 'json' :
@@ -143,18 +144,11 @@ class DataReport
         $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $num . "?Type=carrier&Type=caller-name");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $check = json_decode( curl_exec($curl), 1 );
-
-        print_r($check);
-
         if ($check['status'] == '404') {
             $this->error = true;
             $this->errorMsg['numero'] = 'Erreur formatage du numero';
-            return false;
         }
-        else {
-            return true;
-        }
-
+        return $check;
     }
 
     public function getSpamAwards() {
@@ -205,7 +199,7 @@ class DataReport
         ($user) ? $array['author_id'] = $user : $array['author_id'] = $this->auth->newUser($data['pseudo'], false);
 
         // Twilio API connection
-        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $data['number'] . "?Type=carrier&Type=caller-name");
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $data['country'] . $data['number'] . "?Type=carrier&Type=caller-name");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $array['json'] = curl_exec($curl);
 
