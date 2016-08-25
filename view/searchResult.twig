@@ -9,7 +9,7 @@
       {% include 'search.twig' %}
   {% endif %}
 
-{% if results is not empty " %}
+{% if results is not empty %}
   <h2 class="text-center" > Votre recherche a donné {{ results|length }} resultats</h2>
   <div class="container-fluid">
     {% include 'box.twig' %}

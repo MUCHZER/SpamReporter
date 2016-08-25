@@ -2,6 +2,15 @@
 {% include 'navbar.twig' %}
 <section class="section2">
     <div class="container ">
+
+        {% if errorMsg is not empty %}
+            <br>
+            <div class="alert alert-warning" role="alert">
+                ICUFBZEGBNEZGEZ
+                <a href="{{ settings.basepath }}" class="pull-right">Annuler</a>
+            </div>
+        {% endif %}
+
         {% if reportfromsearch is not empty %}
             <br>
             <div class="alert alert-warning" role="alert">Le numéro {{ reportfromsearch }} n'a jamais été signalé,
@@ -12,7 +21,7 @@
 
         {% if userdata.registered == 1 %}
         <legend> Signaler un numéro</legend>
-        <form action="{{ settings.basepath }}post/report" method="POST" class="form-group contactform">
+        <form action="{{ settings.basepath }}post/" method="POST" class="form-group contactform">
 
             <div class="col-xs-12 col-md-4">
                 <label for="country">Indicatif : </label>

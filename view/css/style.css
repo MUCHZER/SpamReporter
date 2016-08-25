@@ -56,7 +56,7 @@ text-align: center;
 .navtop{
 
   margin-bottom: 0px;
-    border-top: 0.6em solid #3e8acc;
+    border-top: 0.3em solid #3e8acc;
     font-family: 'champagne__limousinesbold';
     border-radius: initial;
 }
@@ -70,15 +70,13 @@ text-align: center;
     font-size: 0.8em;
 
 }
-.panel-heading{
-min-height:
 
-}
 .panel-body{
     min-height:12em;
     max-height:12em;
     padding: 1px 15px ;
     overflow:visible;
+
 }
 .panel-text{
     max-height: 4em;
@@ -89,7 +87,7 @@ min-height:
     background-color: #cccccc;
     min-height: 95vh;
     background-image: url(https://unsplash.it/1920/1080/?random);
-
+    width:100%;
 }
 .section1 button{
 

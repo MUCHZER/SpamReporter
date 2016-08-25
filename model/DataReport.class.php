@@ -98,10 +98,17 @@ class DataReport
                 break;
             case 'post' :
                 $this->auth->checkSessionToken($_COOKIE['token']);
-                $array = $this->post($pagedata['formdata']);
-                $this->addReport($array);
-                $id = $this->db->bdd->lastInsertId();
-                header('Location: ' . $this->settings['basepath'] . 'report/'.$id."/fiche.html" );
+                $check = $this->checkNumValid($pagedata['formdata']['number']);
+                print_r($pagedata['formdata']['number']);
+                if ($check == true) {
+                    $array = $this->post($pagedata['formdata']);
+                    $this->addReport($array);
+                    $id = $this->db->bdd->lastInsertId();
+                    header('Location: ../report/'.$id."/fiche.html" );
+                }
+                else {
+                    print_r( $this->errorMsg );
+                }
                 break;
             case 'login' :
                 $login = $this->login($pagedata['formdata']);
@@ -130,6 +137,25 @@ class DataReport
         }
         return $data;
     }
+    private function checkNumValid($num)
+    {
+        // Twilio API connection
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $num . "?Type=carrier&Type=caller-name");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $check = json_decode( curl_exec($curl), 1 );
+
+        print_r($check);
+
+        if ($check['status'] == '404') {
+            $this->error = true;
+            $this->errorMsg['numero'] = 'Erreur formatage du numero';
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
 
     public function getSpamAwards() {
 
@@ -142,6 +168,7 @@ class DataReport
                 LIMIT 8";
         $result = $this->db->selectSQL($sql);
         return $result;
+
     }
 
     /**
@@ -178,7 +205,7 @@ class DataReport
         ($user) ? $array['author_id'] = $user : $array['author_id'] = $this->auth->newUser($data['pseudo'], false);
 
         // Twilio API connection
-        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . '+' . $data['country'] . $data['number'] . "?Type=carrier&Type=caller-name");
+        $curl = curl_init("https://AC658c8a5e871283dde3bd686dab7f2ad3:e62b29cdcbbe445c95fa8c7d8ee4d20f@lookups.twilio.com/v1/PhoneNumbers/" . $data['number'] . "?Type=carrier&Type=caller-name");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $array['json'] = curl_exec($curl);
 
